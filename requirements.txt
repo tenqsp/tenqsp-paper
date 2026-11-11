@@ -1,0 +1,5 @@
+# Until the paper's cited releases exist, TenQSP and tenqsp-fit come from their main
+# branches; at submission these become exact versions (tenqsp==X.Y.Z, tenqsp-fit==X.Y.Z).
+tenqsp @ git+https://github.com/tenqsp/tenqsp@main
+tenqsp-fit @ git+https://github.com/tenqsp/tenqsp-fit@main
+matplotlib>=3.8
