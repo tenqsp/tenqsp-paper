@@ -13,6 +13,7 @@ with the versions of TenQSP and tenqsp-fit the paper cites. The supplementary mo
 | `models/` | the case-study models as `.tq` files (Supplement S8) |
 | `figures/` | one script per figure; each writes its figure to `out/` |
 | `tables/` | one script per table |
+| `checks/` | reproductions of published results the case studies build on |
 | `out/` | generated figures and tables (not tracked) |
 
 ## Reproducing
