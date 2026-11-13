@@ -1,0 +1,44 @@
+model spheroid_pk
+# The spheroid of Lorz et al. 2015 (Bull Math Biol 77:1-22; models/spheroid_lorz2015.tq) with
+# the drug supplied from plasma: one-compartment plasma levels P1, P2 (elimination k1, k2)
+# hold the surface, a saturable (Emax) cytotoxic kill with 1/EC50 = isat (0: the paper's
+# linear kill), and a separate relaxation time epsd for the drugs, which sets how fast they
+# penetrate. Dimensionless.
+axis r in [0, 1] n=40 geometry=spherical    # distance from the centre
+axis x in [0, 1] n=100                          # resistance level (1: the most resistant)
+
+param mu2=10, sig_s=0.2, sig_c=0.2, g_s=1, g_c=1  # eq 2.12
+param s1=0.3                                      # nutrient at the surface
+param k1=0.7, k2=0.7                              # elimination from plasma (half-life 1)
+param isat=0                                      # 1/EC50 of the cytotoxic drug (0: linear)
+param eps=0.001                                   # relaxation time of s (the paper: 0)
+param epsd=1                                      # relaxation time of c1, c2: how fast the drug penetrates
+
+field n(r, x)
+field s(r)
+field c1(r)
+field c2(r)
+
+p = 0.1 + (1 - x)                                 # proliferation (eq 2.11)
+d = 3 + 1.5*(1 - x)^2                             # death from competition
+mu1 = 0.01 + (1 - x)^2                            # killing by the cytotoxic drug
+rho = int_x(n)                                    # local density
+Ds = sig_s/eps
+Dc = sig_c/epsd
+
+kill = mu1*c1/(1 + isat*c1)                       # saturable (Emax) killing
+d_t(n) = (p*s/(1 + mu2*c2) - d*rho - kill)*n
+d_t(s) = d_r(Ds*d_r(s)) - (g_s + int_x(p*n))/eps*s
+    at r=1: s = s1
+d_t(c1) = d_r(Dc*d_r(c1)) - (g_c + int_x(mu1*n))/epsd*c1
+    at r=1: c1 = P1                               # the surface sees the plasma level
+d_t(c2) = d_r(Dc*d_r(c2)) - (g_c + mu2*rho)/epsd*c2
+    at r=1: c2 = P2
+d_t(P1) = -k1*P1                                  # plasma: the cytotoxic drug
+d_t(P2) = -k2*P2                                  # plasma: the cytostatic drug
+
+n(0) = 0.1*exp(-(x - 0.5)^2/0.005)                # eq 2.9 (C0 = 0.1)
+s(0) = s1
+
+observable total = int_r(rho)
+observable mean_x = int_r(int_x(x*n))/int_r(rho)

@@ -6,7 +6,7 @@ The published figures correspond to a flat (one-dimensional) Laplacian: run on a
 the model gives the paper's nutrient and drug levels at the centre (its Figure 2) and the
 resistance level selected at each depth (its Figure 1). At each depth, the cells concentrate
 at a root of the net growth rate R(x) = 0 (the paper's eqs 3.3 and 3.4). The same is then
-run with geometry=spherical. About a minute in all.
+run with geometry=spherical. About 2 min in all.
 """
 
 from pathlib import Path

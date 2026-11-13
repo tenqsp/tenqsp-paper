@@ -1,0 +1,27 @@
+model spheroid_notrait
+# models/spheroid_pk.tq with one kind of cell (x fixed at 0.5): no resistance axis.
+axis r in [0, 1] n=40 geometry=spherical
+param mu2=10, sig_s=0.2, sig_c=0.2, g_s=1, g_c=1, s1=0.3, k1=0.7, k2=0.7, isat=0
+param eps=0.001, epsd=1, x0=0.5
+field n(r)
+field s(r)
+field c1(r)
+field c2(r)
+p = 0.1 + (1 - x0)
+d = 3 + 1.5*(1 - x0)^2
+mu1 = 0.01 + (1 - x0)^2
+Ds = sig_s/eps
+Dc = sig_c/epsd
+kill = mu1*c1/(1 + isat*c1)
+d_t(n) = (p*s/(1 + mu2*c2) - d*n - kill)*n
+d_t(s) = d_r(Ds*d_r(s)) - (g_s + p*n)/eps*s
+    at r=1: s = s1
+d_t(c1) = d_r(Dc*d_r(c1)) - (g_c + mu1*n)/epsd*c1
+    at r=1: c1 = P1
+d_t(c2) = d_r(Dc*d_r(c2)) - (g_c + mu2*n)/epsd*c2
+    at r=1: c2 = P2
+d_t(P1) = -k1*P1
+d_t(P2) = -k2*P2
+n(0) = 0.1*sqrt(0.005*pi)
+s(0) = s1
+observable total = int_r(n)

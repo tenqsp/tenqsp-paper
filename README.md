@@ -13,15 +13,38 @@ with the versions of TenQSP and tenqsp-fit the paper cites. The supplementary mo
 | `models/` | the case-study models as `.tq` files (Supplement S8) |
 | `figures/` | one script per figure; each writes its figure to `out/` |
 | `tables/` | one script per table |
-| `checks/` | reproductions of published results the case studies build on |
+| `checks/` | reproductions of published results the case studies build on, and checks of the numerics |
+| `results/` | stored simulation results, so figures redraw in seconds |
 | `out/` | generated figures and tables (not tracked) |
 
 ## Reproducing
 
 ```bash
 python -m pip install -r requirements.txt
-python figures/fig7_spheroid.py      # for example; each script says what it checks
+python figures/fig7_spheroid.py      # redraws Figure 7 from results/ (seconds)
 ```
+
+To recompute the results, run the figure's run scripts first. Each has a `--quick` mode on a
+coarser grid (every reported number within about 3 % of the paper's grid) for a fast check.
+
+### Figure 7: the tumour spheroid
+
+| Command | What it does | Time (paper's grid / `--quick`) |
+|---|---|---|
+| `python figures/fig7_runs.py` | the simulations of panels A–E | about 3 min / 40 s on 8 cores |
+| `python figures/fig7_gradients.py` | panel F: exact derivatives with respect to the time and amount of all 48 doses, from one run and one pass back per objective | about 30 min and 80 GB of memory / 6 min and 20 GB |
+| `python figures/fig7_spheroid.py` | draws the figure from `results/` | seconds |
+| `python checks/spheroid_gradients_vs_fd.py` | the exact derivatives against finite differences | about 8 min (quick grid) |
+| `python checks/spheroid_tolerance.py` | the results do not depend on the solver's absolute tolerance | under 1 min (quick grid) |
+| `python checks/lorz2015_reproduction.py` | the published results the case study builds on | about 2 min |
+
+Times measured on a 64-core Linux workstation with nothing else running; a laptop is slower. The
+full-grid derivatives need about 80 GB of memory; on a smaller machine use `--quick` (20 GB).
+
+Models: `models/spheroid_lorz2015.tq` (the published model), `models/spheroid_pk.tq` (with
+plasma pharmacokinetics, a saturable kill and the drug's penetration speed),
+`models/spheroid_nodepth.tq` and `models/spheroid_notrait.tq` (the two simpler models it is
+compared with).
 
 ## Licence
 
