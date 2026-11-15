@@ -1,0 +1,23 @@
+model friberg
+# Myelosuppression (Friberg et al. 2002, J Clin Oncol 20:4713) with maturation written as an
+# axis z: three cells of the erlang scheme are the published three transit compartments.
+# Proliferating cells Prol, maturing cells Transit(z), circulating neutrophils Circ with
+# feedback (circ0/Circ)^gamma; a linear drug effect on proliferation from a one-compartment
+# drug. Time in h, drug in mg, counts in 10^9/L. Values as in tenqsp-fit's tutorial 4.
+axis z in [0, 1] n=3 kind=one_way
+param MTT=100, gamma=0.17, circ0=5, slope=0.5, CL=1, V=50
+ktr = 4/MTT
+T_mat = 3/ktr
+Conc = Ac/V
+E_drug = slope*Conc
+field Transit(z)
+d_t(Prol) = ktr*Prol*(1 - E_drug)*(circ0/Circ)^gamma - ktr*Prol
+d_t(Transit) = -d_z(Transit/T_mat)
+    at z=0: Transit/T_mat = ktr*Prol
+    at z=1: outflow
+d_t(Circ) = Transit(z=1)/T_mat - ktr*Circ
+d_t(Ac) = -CL/V*Ac
+Prol(0) = circ0
+Transit(0) = ktr*circ0*T_mat
+Circ(0) = circ0
+observable ANC = Circ

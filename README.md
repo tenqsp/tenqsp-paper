@@ -14,6 +14,7 @@ with the versions of TenQSP and tenqsp-fit the paper cites. The supplementary mo
 | `figures/` | one script per figure; each writes its figure to `out/` |
 | `tables/` | one script per table |
 | `checks/` | reproductions of published results the case studies build on, and checks of the numerics |
+| `data/` | published data the case studies fit (theophylline: R's `Theoph` data set) |
 | `results/` | stored simulation results, so figures redraw in seconds |
 | `out/` | generated figures and tables (not tracked) |
 
@@ -52,6 +53,19 @@ a closed form or a conservation ledger. By default the run script takes them fro
 distribution of the installed TenQSP version on PyPI; `--tutorials DIR` uses a local folder
 (for instance `docs/tutorials` of a TenQSP checkout). Tutorial 2 takes most of the time
 (about 5 min on its own).
+
+### Figure 5: estimation
+
+| Command | What it does | Time |
+|---|---|---|
+| `python figures/fig5_runs.py` | panels A-C: 20 simulated studies, each fitted with chains of 3 to 60 transit compartments | about 2 h on 40 processes (64 cores) |
+| `python figures/fig5_theoph.py` | panel D: the theophylline data fitted with first-order absorption and chains of 1 to 20 | about 2 h (the chain of 20 is the slowest) |
+| `python figures/fig5_friberg.py` | panels E-F: Friberg's myelosuppression model fitted to a simulated dose-ranging study | one fit |
+| `python figures/fig5_estimation.py` | draws the figure from `results/` | seconds |
+
+The fits use tenqsp-fit (in `requirements.txt`). Models: `figures/transit_fit.py` (the
+transit model with dispersion that simulates the studies, and the chains that fit them) and
+`models/friberg_maturation.tq` (the maturation chain written as an axis).
 
 ### Figure 6: whole-body PBPK as one field
 
