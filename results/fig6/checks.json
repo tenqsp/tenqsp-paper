@@ -1,0 +1,8 @@
+{
+ "field = 29 hand-written ODEs": 1.345305773261325e-09,
+ "mass balance (mg, of 100)": 2.5579538487363606e-15,
+ "AUC = Dose / CL_H": 2.8599532742035194e-09,
+ "steady state Css = R / CL_H": 8.821166019856719e-12,
+ "tissue:plasma = Kp_tissue": 4.981015599980765e-12,
+ "CL_H = series formula, PS 3 to 1000": 8.54760706658908e-13
+}

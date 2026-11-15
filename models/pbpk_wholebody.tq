@@ -1,0 +1,51 @@
+model pbpk_wholebody
+# Whole-body permeability-limited PBPK model (TenQSP tutorial 6): the drug as one field
+# C(organ, sub) of concentrations over 9 organs x 3 spaces (vascular, interstitial,
+# cellular), with arterial and venous blood pools as hub compartments. Passive exchange
+# across the membranes (PS1, PS2), cells at Kp times the interstitium at equilibrium,
+# metabolism in the liver cells on the unbound drug (fu CLint), gut and spleen draining into
+# the liver. Illustrative values of adult-human magnitude (organ volumes and flows in the
+# range of Brown et al. 1997; cardiac output 300 L/h), not a particular drug. Time in h,
+# volumes in L, amounts in mg.
+axis organ categorical [lung, brain, heart, muscle, adipose, kidney, gut, spleen, liver]
+axis sub categorical [vascular, interstitial, cellular]
+
+param Vorg[organ]  = {lung: 1.2, brain: 1.4, heart: 0.33, muscle: 29, adipose: 15,
+                      kidney: 0.31, gut: 1.2, spleen: 0.19, liver: 1.8}          # L
+param frac[sub]    = {vascular: 0.05, interstitial: 0.15, cellular: 0.8}
+param Kp[organ]    = {lung: 1, brain: 0.5, heart: 2, muscle: 1.5, adipose: 5, kidney: 2,
+                      gut: 2, spleen: 1.5, liver: 3}
+param Q_art[organ] = {lung: 0, brain: 45, heart: 15, muscle: 60, adipose: 15, kidney: 70,
+                      gut: 65, spleen: 10, liver: 20}                            # L/h
+param Q_ven[organ] = {lung: 0, brain: 45, heart: 15, muscle: 60, adipose: 15, kidney: 70,
+                      gut: 0, spleen: 0, liver: 95}
+param Q_gut=65, Q_spleen=10, Q_CO=300, V_art=1.7, V_ven=3.4
+param PS1=50, PS2=10, CLint=30, fu=0.5
+
+V(organ, sub) = Vorg[organ]*frac[sub]
+field C(organ, sub) weights=V                    # concentrations (mg/L); amount = C x V
+compartment Cart volume=V_art                    # arterial blood
+compartment Cven volume=V_ven                    # venous blood
+
+transitions X on sub:                            # exchange across the membranes
+    vascular -> interstitial = PS1
+    interstitial -> vascular = PS1
+    interstitial -> cellular = PS2
+    cellular -> interstitial = PS2/Kp[organ]
+transitions portal on organ: gut -> liver = Q_gut, spleen -> liver = Q_spleen
+
+flux J_art:  Cart -> C[sub=vascular]              = Q_art[organ]*Cart   # mg/h
+flux J_ven:  C[sub=vascular] -> Cven              = Q_ven[organ]*C
+flux J_lung: Cven -> C[organ=lung, sub=vascular]  = Q_CO*Cven
+flux J_out:  C[organ=lung, sub=vascular] -> Cart  = Q_CO*C
+
+d_t(C)                            = trans_sub(X, C)
+d_t(C[sub=vascular])              = trans_organ(portal, C) + (J_art - J_ven)/V
+d_t(C[organ=lung, sub=vascular])  = (J_lung - J_out)/V
+d_t(C[organ=liver, sub=cellular]) = -fu*CLint/Kp[organ]*C/V        # metabolism
+
+d_t(Cart) = (J_out - sum_organ(J_art))/V_art
+d_t(Cven) = (sum_organ(J_ven) - J_lung)/V_ven
+d_t(AUC)  = Cart
+
+observable in_tissues = sum_organ(sum_sub(C))    # an amount (mg): sums use the weights

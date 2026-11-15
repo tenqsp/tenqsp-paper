@@ -39,6 +39,17 @@ Models: `models/savic_transit.tq` (transit absorption, the drug in transit on an
 `models/influenza_eclipse.tq` (the target-cell-limited influenza model of Baccam et al. 2006
 with the eclipse phase on an axis; one cell is the published model).
 
+### Figure 6: whole-body PBPK as one field
+
+| Command | What it does | Time |
+|---|---|---|
+| `python figures/fig6_runs.py` | the computations of panels B-E and the exact checks | about 1 min |
+| `python figures/fig6_pbpk.py` | draws panels B-E from `results/` (panel A, the structure diagram, is drawn by hand) | seconds |
+
+Model: `models/pbpk_wholebody.tq` (9 organs x 3 spaces, arterial and venous blood; the
+model of TenQSP's tutorial 6). The run script also writes the model as 29 ODEs by hand and
+checks the field against them.
+
 ### Figure 7: the tumour spheroid
 
 | Command | What it does | Time (paper's grid / `--quick`) |
