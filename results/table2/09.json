@@ -1,0 +1,17 @@
+{
+ "quantities": {
+  "matrix_exponential": 1.6789796882101896e-08,
+  "fast_slope": 0.0007845144397878867,
+  "slow_slope": 1.1077193606823243e-09,
+  "nielsen_vs_hand": 1.0682452539212406e-07,
+  "fokker_planck_mass": 6.661338147750939e-16,
+  "fokker_planck_steady": 0.0019404272916839496,
+  "two_wells_vs_two_states": 0.0005746712879601823,
+  "ledger": 3.1622205032573205e-15,
+  "late_slope": 0.002860817594107168
+ },
+ "tutorial": "09_persisters_and_dormancy.py",
+ "tenqsp": "0.8.3",
+ "seconds": 14.7,
+ "seconds_extraction": 3.1
+}

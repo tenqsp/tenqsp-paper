@@ -1,0 +1,15 @@
+{
+ "quantities": {
+  "standard_model": 4.651956645642826e-08,
+  "r0_quadrature": 0.0009937896584411021,
+  "set_point": 0.0009870050170281974,
+  "age_profile": 0.0001454475022960106,
+  "growth_rate": 0.0016855367698573875,
+  "perfect_pi": 1.427742905116477e-09,
+  "perfect_rti": 0.009473900767283647
+ },
+ "tutorial": "07_infection_age.py",
+ "tenqsp": "0.8.3",
+ "seconds": 44.0,
+ "seconds_extraction": 0.0
+}

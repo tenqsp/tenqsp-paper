@@ -1,0 +1,36 @@
+{
+ "quantities": {
+  "notation_vs_api_identical": true,
+  "theorem1_size": 3.308927507039705e-05,
+  "theorem1_mean": 2.2107305271865288e-10,
+  "theorem1_variance": 0.0005680072572337158,
+  "theorem2_size": 0.0009031930196187199,
+  "theorem2_mean": 0.0005434231492438268,
+  "three_odes_size": 0.0009031930246384823,
+  "three_odes_mean": 0.0005434394842649404,
+  "doses_mean_160": 0.0005138645462612335,
+  "doses_mean_320": 0.00018368349758079994,
+  "ledger": 1.6977740934455551e-15,
+  "bounded_grid_change": 0.0007524129729270523
+ },
+ "convergence": {
+  "doses_size": {
+   "n": [
+    160.0,
+    320.0
+   ],
+   "error": [
+    0.004358944108684537,
+    0.0013245665298854403
+   ],
+   "order": 1.718458396533255,
+   "order_steps": [
+    1.7184583965332512
+   ]
+  }
+ },
+ "tutorial": "12_drug_tolerance_continuum.py",
+ "tenqsp": "0.8.3",
+ "seconds": 33.2,
+ "seconds_extraction": 0.0
+}

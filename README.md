@@ -39,6 +39,20 @@ Models: `models/savic_transit.tq` (transit absorption, the drug in transit on an
 `models/influenza_eclipse.tq` (the target-cell-limited influenza model of Baccam et al. 2006
 with the eclipse phase on an axis; one cell is the published model).
 
+### Figure 3 and Table 2: verification
+
+| Command | What it does | Time |
+|---|---|---|
+| `python tables/table2_runs.py` | runs TenQSP's 12 tutorials (one process each) and stores the numbers their checks measure | about 5 min |
+| `python tables/table2_verification.py` | writes Table 2 from `results/` (`out/table2.md`, `out/table2.csv`) | seconds |
+| `python figures/fig3_verification.py` | draws the figure from `results/` | seconds |
+
+The 12 reference models are TenQSP's tutorials; each checks itself against a published model,
+a closed form or a conservation ledger. By default the run script takes them from the source
+distribution of the installed TenQSP version on PyPI; `--tutorials DIR` uses a local folder
+(for instance `docs/tutorials` of a TenQSP checkout). Tutorial 2 takes most of the time
+(about 5 min on its own).
+
 ### Figure 6: whole-body PBPK as one field
 
 | Command | What it does | Time |

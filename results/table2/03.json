@@ -1,0 +1,33 @@
+{
+ "quantities": {
+  "chain_vs_axis": 4.270450659760172e-10,
+  "chain_vs_axis_rel": 8.540901319520344e-11,
+  "baseline_rhs": 5.2041704279304205e-18,
+  "baseline_drift": 0.0,
+  "erlang_mean_time": 1.8474111129762605e-13,
+  "nadir_vs_hand": 1.4242572321521152e-07
+ },
+ "convergence": {
+  "sharp_mean_time": {
+   "n": [
+    100.0,
+    200.0,
+    400.0
+   ],
+   "error": [
+    0.0007296910665644419,
+    0.00029507290736532357,
+    0.00011617134917187854
+   ],
+   "order": 1.3255157421027244,
+   "order_steps": [
+    1.3062143280088394,
+    1.3448171561966005
+   ]
+  }
+ },
+ "tutorial": "03_myelosuppression.py",
+ "tenqsp": "0.8.3",
+ "seconds": 46.9,
+ "seconds_extraction": 0.6
+}

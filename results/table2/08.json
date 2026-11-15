@@ -1,0 +1,31 @@
+{
+ "quantities": {
+  "no_births_decay": 2.949862576429041e-13,
+  "euler_lotka": 5.3157272743575845e-06,
+  "stable_age_distribution": 1.8426531223193705e-05,
+  "rbc_lifespan": 4.3298697960381105e-14
+ },
+ "convergence": {
+  "characteristics": {
+   "n": [
+    120.0,
+    240.0,
+    480.0
+   ],
+   "error": [
+    0.10394829528640988,
+    0.03203294384417339,
+    0.009156456530815463
+   ],
+   "order": 1.752466446315457,
+   "order_steps": [
+    1.6982378049839786,
+    1.8066950876469294
+   ]
+  }
+ },
+ "tutorial": "08_age_structured_population.py",
+ "tenqsp": "0.8.3",
+ "seconds": 41.1,
+ "seconds_extraction": 0.0
+}

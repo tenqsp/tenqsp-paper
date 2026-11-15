@@ -1,0 +1,33 @@
+{
+ "quantities": {
+  "sharp_away_from_corner": 3.345887785854984e-05,
+  "sharp_plateau": 1.3926707431721752e-06,
+  "erlang_gamma_closed_form": 6.972435073748784e-09,
+  "erlang_gamma_closed_form_rel": 5.81036256145732e-10,
+  "drug_closed_form": 0.00643592270640877,
+  "drug_concentration": 1.8045644284425677e-10
+ },
+ "convergence": {
+  "sharp_corner": {
+   "n": [
+    40.0,
+    80.0,
+    160.0
+   ],
+   "error": [
+    0.022505432106074252,
+    0.013443929200830004,
+    0.008093416106348172
+   ],
+   "order": 0.7377262945821217,
+   "order_steps": [
+    0.7433184146706928,
+    0.732134174493551
+   ]
+  }
+ },
+ "tutorial": "04_lifespan_response.py",
+ "tenqsp": "0.8.3",
+ "seconds": 21.8,
+ "seconds_extraction": 0.9
+}

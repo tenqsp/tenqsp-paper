@@ -1,0 +1,14 @@
+{
+ "quantities": {
+  "cosh_profile": 0.00240304699589311,
+  "effectiveness_factor": 0.0019480123939297211,
+  "crank_series": 0.001013209725583497,
+  "ledger_surface": 5.445179097496436e-16,
+  "ledger_books": 4.2443086082736646e-16,
+  "steady_liquid": 0.0001640035044347954
+ },
+ "tutorial": "10_biofilm_penetration.py",
+ "tenqsp": "0.8.3",
+ "seconds": 3.4,
+ "seconds_extraction": 0.7
+}

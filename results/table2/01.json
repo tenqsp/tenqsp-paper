@@ -1,0 +1,12 @@
+{
+ "quantities": {
+  "chain_vs_axis": 1.899991275422508e-11,
+  "chain_vs_axis_rel": 3.6015109648566527e-12,
+  "erlang_vs_gamma_cdf": 5.188777258524624e-05,
+  "savic_rate": 0.00492327125552208
+ },
+ "tutorial": "01_transit_compartments.py",
+ "tenqsp": "0.8.3",
+ "seconds": 10.5,
+ "seconds_extraction": 0.3
+}

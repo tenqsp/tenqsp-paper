@@ -1,0 +1,17 @@
+{
+ "quantities": {
+  "field_vs_odes": 1.3453031125906816e-09,
+  "mass_balance": 2.5579538487363607e-13,
+  "mass_balance_rel": 2.5579538487363606e-15,
+  "ledger": 1.9926172275737113e-15,
+  "auc": 2.8599532742035194e-09,
+  "css": 8.821166019856719e-12,
+  "kp_tissue": 4.981015599980765e-12,
+  "cells_vs_kp": 3.248734614658133e-12,
+  "clearance_vs_ps": 9.518045906986572e-09
+ },
+ "tutorial": "06_whole_body_pbpk.py",
+ "tenqsp": "0.8.3",
+ "seconds": 8.0,
+ "seconds_extraction": 0.6
+}

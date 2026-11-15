@@ -1,0 +1,15 @@
+{
+ "quantities": {
+  "notation_vs_api": 2.777755803151649e-10,
+  "notation_vs_api_rel": 7.194845490851657e-10,
+  "weibull_emptying": 0.5222239053379809,
+  "f_si_closed_form": 0.001062213627075037,
+  "cat_closed_form": 3.042098062344678e-08,
+  "regimen_vs_sum": 8.212274194008273e-10,
+  "regimen_vs_sum_rel": 1.4774450041893558e-09
+ },
+ "tutorial": "02_where_in_the_gut.py",
+ "tenqsp": "0.8.3",
+ "seconds": 309.0,
+ "seconds_extraction": 11.8
+}

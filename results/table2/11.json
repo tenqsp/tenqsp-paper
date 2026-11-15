@@ -1,0 +1,14 @@
+{
+ "quantities": {
+  "growth_rate": 0.0009697388091103321,
+  "fisher_speed": 0.0035897430414186804,
+  "shallow_front_speed": 0.0036258410290983534,
+  "pushed_front_slow_decay": 0.1420867491810307,
+  "pushed_front_fast_decay": 0.07336676094561523,
+  "ledger": 3.255208333333333e-15
+ },
+ "tutorial": "11_phage_plaque_fronts.py",
+ "tenqsp": "0.8.3",
+ "seconds": 144.9,
+ "seconds_extraction": 0.1
+}
