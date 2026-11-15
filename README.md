@@ -27,6 +27,18 @@ python figures/fig7_spheroid.py      # redraws Figure 7 from results/ (seconds)
 To recompute the results, run the figure's run scripts first. Each has a `--quick` mode on a
 coarser grid (every reported number within about 3 % of the paper's grid) for a fast check.
 
+### Figure 2: transit chains and the eclipse phase
+
+| Command | What it does | Time |
+|---|---|---|
+| `python figures/fig2_runs.py` | the computations of panels A-F | under 1 min |
+| `python figures/fig2_transit.py` | draws the figure from `results/` | seconds |
+| `python checks/baccam2006_reproduction.py` | the published influenza model the figure builds on | seconds |
+
+Models: `models/savic_transit.tq` (transit absorption, the drug in transit on an axis) and
+`models/influenza_eclipse.tq` (the target-cell-limited influenza model of Baccam et al. 2006
+with the eclipse phase on an axis; one cell is the published model).
+
 ### Figure 7: the tumour spheroid
 
 | Command | What it does | Time (paper's grid / `--quick`) |

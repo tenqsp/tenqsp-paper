@@ -1,0 +1,33 @@
+model influenza_eclipse
+# Target-cell-limited influenza model with an eclipse phase (Baccam et al. 2006, J Virol
+# 80:7590, equations 5-8), the eclipse written as an axis: e(a) is the density of infected
+# cells by time since infection a, which cross the eclipse (mean 1/k = 6 h = 0.25 day) and
+# then produce virus. Parameters: the geometric means of Baccam's Table 3 (delay model);
+# T0 = 4e8 cells, fixed in the paper. Time in days, virus in TCID50/mL of nasal wash.
+#
+# The eclipse duration has mean 0.25 day whatever the grid. On n cells the erlang scheme
+# makes it Erlang(n) (n = 1 is Baccam's model: a single eclipse compartment I1 left at
+# rate k); `using sharp` on a fine grid makes it a fixed delay of 0.25 day.
+axis a in [0, 0.25] n=1 units=day kind=one_way    # time since infection, in the eclipse
+
+param beta=3.2e-5      # infection rate constant, 1/(TCID50/mL)/day
+param p=4.6e-2         # virus production per productive cell, TCID50/mL/day
+param c=5.2            # virus clearance, 1/day
+param delta=5.2        # death of productive cells, 1/day
+param V0=7.5e-2        # inoculum, TCID50/mL
+
+compartment T units=cells          # uninfected target cells
+field e(a) units=cells/day         # infected cells in the eclipse
+compartment I units=cells          # productively infected cells
+compartment V units=TCID50/mL      # infectious virus
+
+d_t(T) = -beta*T*V
+d_t(e) = -d_a(e)
+    at a=0: e = beta*T*V           # new infections enter the eclipse
+    at a=0.25: outflow             # and leave it into I
+d_t(I) = e(a=0.25) - delta*I
+d_t(V) = p*I - c*V
+
+T(0) = 4e8
+V(0) = V0
+observable log10V = log10(V)

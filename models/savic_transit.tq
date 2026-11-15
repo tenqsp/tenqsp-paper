@@ -1,0 +1,21 @@
+model savic_transit
+# Transit absorption (Savic et al. 2007, J Pharmacokinet Pharmacodyn 34:711) with the drug
+# in transit written as a field along the fraction of the transit crossed, z. On n cells
+# the erlang scheme is exactly a chain of n transit compartments (n - 1 before the
+# absorption compartment's input, rate k_tr = n/MTT). One-compartment disposition.
+# Illustrative values (a dose of 100 mg; MTT 2 h, ka 1.2 /h, CL 3 L/h, V 10 L).
+axis z in [0, 1] n=4 kind=one_way    # fraction of the transit crossed
+
+param MTT=2, ka=1.2, CL=3, V=10
+
+field u(z) units=mg
+compartment Aa units=mg              # absorption compartment
+compartment Ac units=mg              # central compartment
+
+d_t(u) = -d_z(u/MTT)
+    at z=1: outflow
+d_t(Aa) = u(z=1)/MTT - ka*Aa
+d_t(Ac) = ka*Aa - CL/V*Ac
+
+u(0) = 100*point(z, at=0.125)        # the dose, in the first cell
+observable conc = Ac/V
