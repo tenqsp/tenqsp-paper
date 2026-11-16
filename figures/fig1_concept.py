@@ -41,7 +41,8 @@ OUT = ROOT / "out"
 MODEL = ROOT / "models" / "friberg_maturation.tq"
 DOSE = 90.0
 WRT = ["MTT", "gamma", "circ0", "slope"]
-WIDTH = 60  # characters per line in panel C
+WIDTH = 50  # characters per line in panel C
+DPI = 300
 SIZE = 6.5  # points, at print size: the figure is drawn at the journal's full width
 EXCERPTS = [  # panel C: pieces of m.explain(), verbatim, in its order ("..." marks a cut)
     ("transport along z", "transit compartments"),
@@ -147,8 +148,8 @@ def main():
     plt.rcParams.update({"font.size": SIZE, "axes.titlesize": 7.5, "axes.titleweight": "bold",
                          "axes.labelsize": SIZE + 0.5, "legend.fontsize": SIZE - 0.5, "axes.linewidth": 0.6,
                          "xtick.major.width": 0.6, "ytick.major.width": 0.6, "lines.linewidth": 1.1})
-    fig = plt.figure(figsize=(7.0, 8.3))
-    gs = fig.add_gridspec(3, 2, height_ratios=[1.3, 1.1, 1], width_ratios=[1.3, 1], hspace=0.27, wspace=0.22,
+    fig = plt.figure(figsize=(7.0, 8.3), dpi=DPI)  # the checks below measure at print resolution
+    gs = fig.add_gridspec(3, 2, height_ratios=[1.3, 1.1, 1], width_ratios=[1, 1], hspace=0.27, wspace=0.22,
                           left=0.075, right=0.99, top=0.965, bottom=0.05)
 
     # A
@@ -219,7 +220,7 @@ def main():
 
     OUT.mkdir(exist_ok=True)
     for ext in ("png", "pdf"):
-        fig.savefig(OUT / f"fig1_concept.{ext}", dpi=300)
+        fig.savefig(OUT / f"fig1_concept.{ext}", dpi=DPI)
     print(f"wrote {OUT / 'fig1_concept.png'} (TenQSP {tq.__version__})", file=sys.stderr)
 
 
