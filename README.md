@@ -28,6 +28,24 @@ python figures/fig7_spheroid.py      # redraws Figure 7 from results/ (seconds)
 To recompute the results, run the figure's run scripts first. Each has a `--quick` mode on a
 coarser grid (every reported number within about 3 % of the paper's grid) for a fast check.
 
+### Figure 1: from equations to estimates
+
+| Command | What it does | Time |
+|---|---|---|
+| `python figures/fig1_concept.py` | the model file, its equations (`to_latex()`), `explain()`, a run with its ledger, exact derivatives, and the fit of Figure 5 E-F | under 1 min |
+
+Panel F reads the fit stored by `figures/fig5_friberg.py`. Model: `models/friberg_maturation.tq`.
+The figure is drawn at full page width (7 in), and the script stops if any text leaves its box.
+
+### Table 1: comparison with other tools
+
+`tables/table1_comparison.md`, written by hand from each tool's documentation, with a source
+for every cell and the points to word carefully.
+
+| Command | What it does | Time |
+|---|---|---|
+| `python tables/table1_render.py` | the same as a Word file on landscape pages, `out/table1_comparison.docx` (needs pandoc) | seconds |
+
 ### Figure 2: transit chains and the eclipse phase
 
 | Command | What it does | Time |
@@ -53,6 +71,17 @@ a closed form or a conservation ledger. By default the run script takes them fro
 distribution of the installed TenQSP version on PyPI; `--tutorials DIR` uses a local folder
 (for instance `docs/tutorials` of a TenQSP checkout). Tutorial 2 takes most of the time
 (about 5 min on its own).
+
+### Figure 4: the reference models
+
+| Command | What it does | Time |
+|---|---|---|
+| `python figures/fig4_runs.py` | runs TenQSP's 12 tutorials and stores each model's description and the amounts along its axes over time | about 5 min (12 processes) |
+| `python figures/fig4_gallery.py` | draws the figure from `results/` | seconds |
+
+The schematics are drawn from the models' descriptions (their axes, compartments and the
+couplings written in them), not by hand. The tutorials come from the source distribution of
+the installed TenQSP version, as for Table 2.
 
 ### Figure 5: estimation
 
