@@ -1,0 +1,18 @@
+{
+ "model": "whole-body PBPK",
+ "key": "pbpk",
+ "mode": "loop",
+ "device": "cpu",
+ "states": 30,
+ "members": 1024,
+ "first_s": 1.348445013165474,
+ "per_member_s": 0.015035746968351305,
+ "members_timed": 16,
+ "peak_gb": 0.553168,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 17.03
+}

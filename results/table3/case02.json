@@ -1,0 +1,26 @@
+{
+ "label": "transit absorption, chain of 25",
+ "figure": "5",
+ "repeats": 3,
+ "states": 27,
+ "params": 4,
+ "derivatives": "forward",
+ "build_s": 0.17167465388774872,
+ "scipy_first_s": 0.956948634237051,
+ "scipy_s": 0.14236910454928875,
+ "jax_first_s": 1.3557841181755066,
+ "jax_s": 0.02598872035741806,
+ "gap": 1.8321789745766214e-15,
+ "f_first_s": 1.9647157583385706,
+ "f_s": 0.03916114754974842,
+ "grad_first_s": 2.0731889326125383,
+ "grad_s": 0.042785460129380226,
+ "grad_finite": true,
+ "peak_gb": 0.682084,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 15.47
+}

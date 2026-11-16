@@ -1,0 +1,26 @@
+{
+ "label": "tumour spheroid, 40 x 100 cells",
+ "figure": "7",
+ "repeats": 1,
+ "states": 4122,
+ "params": 4,
+ "derivatives": "forward",
+ "build_s": 0.19043828174471855,
+ "scipy_first_s": 93.95243708975613,
+ "scipy_s": 92.82192612625659,
+ "jax_first_s": 112.45473266020417,
+ "jax_s": 109.16547275148332,
+ "gap": 1.4558617988027716e-12,
+ "f_first_s": 283.90784483775496,
+ "f_s": 280.28847137093544,
+ "grad_first_s": 283.1161538772285,
+ "grad_s": 280.80140509083867,
+ "grad_finite": true,
+ "peak_gb": 0.972848,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 5.58
+}

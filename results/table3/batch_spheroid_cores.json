@@ -1,0 +1,20 @@
+{
+ "model": "tumour spheroid, 10 x 25 cells",
+ "key": "spheroid",
+ "mode": "cores",
+ "device": "cpu",
+ "states": 282,
+ "members": 64,
+ "cores": 64,
+ "first_s": 2173.6684618145227,
+ "batch_s": 1903.2705582622439,
+ "per_member_s": 29.73860247284756,
+ "failed": 1,
+ "peak_gb": 0.895324,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 30.5
+}

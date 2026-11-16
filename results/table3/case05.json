@@ -1,0 +1,26 @@
+{
+ "label": "transit with dispersion, 200 cells (sharp)",
+ "figure": "5",
+ "repeats": 3,
+ "states": 202,
+ "params": 5,
+ "derivatives": "forward",
+ "build_s": 0.1734006516635418,
+ "scipy_first_s": 1.5456188656389713,
+ "scipy_s": 0.5075170379132032,
+ "jax_first_s": 2.619158711284399,
+ "jax_s": 0.8319935724139214,
+ "gap": 4.859440830744902e-07,
+ "f_first_s": 16.59364203736186,
+ "f_s": 12.924914574250579,
+ "grad_first_s": 17.657131258398294,
+ "grad_s": 15.167470494285226,
+ "grad_finite": true,
+ "peak_gb": 0.740432,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 11.7
+}

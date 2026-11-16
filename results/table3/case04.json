@@ -1,0 +1,26 @@
+{
+ "label": "influenza, eclipse on 40 cells",
+ "figure": "2",
+ "repeats": 3,
+ "states": 43,
+ "params": 5,
+ "derivatives": "forward",
+ "build_s": 0.0941592063754797,
+ "scipy_first_s": 1.169089164584875,
+ "scipy_s": 0.26560199819505215,
+ "jax_first_s": 1.7191707231104374,
+ "jax_s": 0.05821499601006508,
+ "gap": 1.6645531546737834e-09,
+ "f_first_s": 2.2884755451232195,
+ "f_s": 0.2114678304642439,
+ "grad_first_s": 2.048063574358821,
+ "grad_s": 0.22025892697274685,
+ "grad_finite": true,
+ "peak_gb": 0.647608,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 30.9
+}

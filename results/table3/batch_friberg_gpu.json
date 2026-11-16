@@ -1,0 +1,21 @@
+{
+ "model": "Friberg myelosuppression",
+ "key": "friberg",
+ "mode": "vmap",
+ "device": "gpu",
+ "states": 6,
+ "members": 1024,
+ "first_s": 3.9527526404708624,
+ "batch_s": 0.1727014873176813,
+ "per_member_s": 0.00016865379620867316,
+ "failed": 0,
+ "peak_gb": 2.35068,
+ "peak_gpu_gb": 0.117453824,
+ "gpu": "NVIDIA RTX A6000",
+ "versions": {
+  "tenqsp": "0.8.4.dev0",
+  "jax": "0.11.2",
+  "python": "3.12.15"
+ },
+ "load_at_start": 30.9
+}

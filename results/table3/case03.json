@@ -1,0 +1,26 @@
+{
+ "label": "whole-body PBPK, 9 organs x 3 spaces",
+ "figure": "6",
+ "repeats": 3,
+ "states": 30,
+ "params": 4,
+ "derivatives": "forward",
+ "build_s": 0.014090780168771744,
+ "scipy_first_s": 1.5762233771383762,
+ "scipy_s": 0.13369863666594028,
+ "jax_first_s": 2.225885162129998,
+ "jax_s": 0.026372672989964485,
+ "gap": 4.776817210053825e-15,
+ "f_first_s": 3.7615767884999514,
+ "f_s": 0.0788448229432106,
+ "grad_first_s": 3.539784697815776,
+ "grad_s": 0.08384420350193977,
+ "grad_finite": true,
+ "peak_gb": 0.740912,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 25.94
+}

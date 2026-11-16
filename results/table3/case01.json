@@ -1,0 +1,26 @@
+{
+ "label": "Friberg myelosuppression, 3 maturation cells",
+ "figure": "5",
+ "repeats": 3,
+ "states": 6,
+ "params": 4,
+ "derivatives": "forward",
+ "build_s": 0.14961031638085842,
+ "scipy_first_s": 1.0691655818372965,
+ "scipy_s": 0.037943752482533455,
+ "jax_first_s": 1.660465033724904,
+ "jax_s": 0.01004970446228981,
+ "gap": 3.85300564536489e-16,
+ "f_first_s": 2.4679159857332706,
+ "f_s": 0.006600169464945793,
+ "grad_first_s": 2.4920095037668943,
+ "grad_s": 0.012055326253175735,
+ "grad_finite": true,
+ "peak_gb": 0.674936,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 17.27
+}

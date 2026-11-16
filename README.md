@@ -126,6 +126,19 @@ plasma pharmacokinetics, a saturable kill and the drug's penetration speed),
 `models/spheroid_nodepth.tq` and `models/spheroid_notrait.tq` (the two simpler models it is
 compared with).
 
+### Table 3 and Figure S-perf: what a run costs
+
+| Command | What it does | Time |
+|---|---|---|
+| `python tables/table3_runs.py` | one solve on each backend and one gradient, for 10 models from 3 to 16,242 states | about 1.5 h (the largest spheroid grid takes 1 h) |
+| `python tables/table3_batches.py` | virtual populations on the CPU: one call per member, one batch on 1 core, one batch on 64 cores | about 2 h (the spheroid batches take most of it) |
+| `python tables/table3_batches.py gpu` | the same batches on a GPU (an environment with CUDA JAX) | about 10 min |
+| `python tables/table3_performance.py` | Table 3 (`out/table3.md`, `.csv`), the batch table (`out/table3_batches.md`) and Figure S-perf (`out/figS_perf.png`, `.pdf`) from `results/table3` | seconds |
+
+The times are wall-clock seconds, so run on an otherwise idle machine; each result records the
+machine's load when it started. The paper's numbers: TenQSP 0.8.3, a 64-core Linux workstation
+with an RTX A6000, JAX 0.12.0.1 on the CPU and 0.11.2 on the GPU.
+
 ## Licence
 
 Code: Apache-2.0 (see `LICENSE`). Copyright 2026 Yonsei University Health System.

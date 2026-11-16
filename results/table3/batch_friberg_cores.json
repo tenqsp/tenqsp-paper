@@ -1,0 +1,20 @@
+{
+ "model": "Friberg myelosuppression",
+ "key": "friberg",
+ "mode": "cores",
+ "device": "cpu",
+ "states": 6,
+ "members": 1024,
+ "cores": 64,
+ "first_s": 4.812393447384238,
+ "batch_s": 1.4944055452942848,
+ "per_member_s": 0.00145938041532645,
+ "failed": 0,
+ "peak_gb": 0.584012,
+ "versions": {
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
+  "python": "3.12.15"
+ },
+ "load_at_start": 18.34
+}
