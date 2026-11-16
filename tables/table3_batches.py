@@ -122,22 +122,27 @@ def run(name, mode):
 
 
 def main():
-    if len(sys.argv) == 3:
-        print(json.dumps(run(sys.argv[1], sys.argv[2])))
+    args = sys.argv[1:]
+    if args[:1] == ["--child"]:  # one case, in its own process (the device count is fixed at import)
+        print(json.dumps(run(*args[1:])))
         return
-    gpu = sys.argv[1:] == ["gpu"]
+    gpu = args == ["gpu"]
+    if len(args) == 2:
+        cases = [tuple(args)]
+    else:
+        cases = [(name, mode) for name in MODELS for mode in (("vmap",) if gpu else CPU_MODES)]
     OUT.mkdir(parents=True, exist_ok=True)
-    for name in MODELS:
-        for mode in ("vmap",) if gpu else CPU_MODES:
-            p = subprocess.run([sys.executable, __file__, name, mode], capture_output=True, text=True, check=False)
-            if p.returncode != 0:
-                print(f"{name} {mode} failed:\n{p.stderr[-2000:]}", flush=True)
-                continue
-            row = json.loads(p.stdout.strip().splitlines()[-1])
-            tag = "gpu" if gpu else mode
-            (OUT / f"batch_{name}_{tag}.json").write_text(json.dumps(row, indent=1))
-            print(f"{row['model']} ({row['states']} states), {tag}: {row['per_member_s']:.4g} s per member "
-                  f"(first call {row['first_s']:.3g} s), {row['peak_gb']:.1f} GB", flush=True)
+    for name, mode in cases:
+        p = subprocess.run([sys.executable, __file__, "--child", name, mode], capture_output=True, text=True,
+                           check=False)
+        if p.returncode != 0:
+            print(f"{name} {mode} failed:\n{p.stderr[-2000:]}", flush=True)
+            continue
+        row = json.loads(p.stdout.strip().splitlines()[-1])
+        tag = "gpu" if row["device"] == "gpu" else mode
+        (OUT / f"batch_{name}_{tag}.json").write_text(json.dumps(row, indent=1))
+        print(f"{row['model']} ({row['states']} states), {tag}: {row['per_member_s']:.4g} s per member "
+              f"(first call {row['first_s']:.3g} s), {row['peak_gb']:.1f} GB", flush=True)
 
 
 if __name__ == "__main__":
