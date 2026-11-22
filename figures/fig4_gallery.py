@@ -24,6 +24,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import printstyle as ps
 from matplotlib.colors import LogNorm, Normalize
 from matplotlib.patches import Circle, FancyArrowPatch, Rectangle
 
@@ -133,14 +134,18 @@ def draw_field(ax, ir, f, x0, y0, w, h):
                 ax.add_patch(Rectangle((ox + i * cw, oy + j * ch), cw, ch, fc=FIELD_C, ec=EDGE, lw=0.6,
                                        alpha=1 if k == 0 else 0.8))
     W, H = cols * cw, rows * ch
-    ax.text(x0 + W / 2, y0 + H / 2, f["name"], ha="center", va="center", fontsize=7, weight="bold")
+    ax.text(x0 + W / 2, y0 + H / 2, f["name"], ha="center", va="center", fontsize=ps.SIZE, weight="bold")
     # axis directions
     def arrow(p, q, kind, label, rot=0):
         style = "-|>" if kind == "one_way" else "<|-|>"
         ax.add_patch(FancyArrowPatch(p, q, arrowstyle=style, mutation_scale=6, lw=0.8, color="0.25"))
         mid = ((p[0] + q[0]) / 2, (p[1] + q[1]) / 2)
-        ax.text(mid[0] + (0 if rot == 0 else -0.12), mid[1] - (0.14 if rot == 0 else 0), label, fontsize=6,
-                ha="center" if rot == 0 else "right", va="top" if rot == 0 else "center", rotation=rot)
+        if rot == 0:  # at the start, clear of the arrows between fields at the centre
+            ax.text(p[0] + 0.05, p[1] - 0.14, label, fontsize=5.5, ha="left", va="top")
+        elif q[1] - p[1] < 0.8:  # a short block: the label beside it, horizontal
+            ax.text(x0 + W + 0.1, mid[1], label, fontsize=5.5, ha="left", va="center")
+        else:
+            ax.text(mid[0] - 0.12, mid[1], label, fontsize=5.5, ha="right", va="center", rotation=90)
 
     def axis_label(a):
         g = axes[a].get("geometry", "planar")
@@ -155,25 +160,25 @@ def draw_field(ax, ir, f, x0, y0, w, h):
         ax.text(x0 + W + dx * (shown_layers - 1) + 0.05, y0 + H + dy * (shown_layers - 1),
                 "\n".join(f"{a}: {lab}" for a, lab in zip(cat, labels, strict=True)), fontsize=5.5, va="top")
     elif cat:
-        ax.text(x0 + W / 2, y0 - 0.05, f"{cat[0]} ({n[cat[0]]})", fontsize=6, ha="center", va="top")
+        ax.text(x0 + W / 2, y0 - 0.05, f"{cat[0]} ({n[cat[0]]})", fontsize=5.5, ha="center", va="top")
         if len(cat) > 1:
-            ax.text(x0 - 0.05, y0 + H / 2, f"{cat[1]} ({n[cat[1]]})", fontsize=6, ha="right", va="center",
-                    rotation=90)
+            ax.text(x0 + W + 0.05, y0 + H / 2, f"{cat[1]} ({n[cat[1]]})", fontsize=5.5, ha="left", va="center")
     return (x0, y0, W + dx * (shown_layers - 1), H + dy * (shown_layers - 1))
 
 
 def schematic(ax, ir):
     ax.set_xlim(0, 10)
-    ax.set_ylim(0, 4)
+    ax.set_ylim(0, 4.1)
     ax.axis("off")
     fields = ir["fields"]
     comps = [c["name"] for c in ir["compartments"]]
     lk = links(ir)
     boxes = {}
     nf = len(fields)
-    h = 3.0 / max(nf, 1)
+    span, base, gap = (3.0, 0.55, 0.55) if nf < 3 else (3.55, 0.3, 0.7)  # room for each field's labels
+    h = span / max(nf, 1)
     for k, f in enumerate(fields):
-        boxes[f["name"]] = draw_field(ax, ir, f, 2.6, 0.55 + (nf - 1 - k) * h + 0.1, 4.6, h - 0.55)
+        boxes[f["name"]] = draw_field(ax, ir, f, 2.6, base + (nf - 1 - k) * h + 0.1, 4.6, h - gap)
     # compartments: sources on the left, sinks on the right, the rest above
     field_names = set(boxes)
     left = [c for c in comps if any(s == c and d in field_names for s, d in lk)]
@@ -188,7 +193,7 @@ def schematic(ax, ir):
     r = 0.38
     for c, (x, y) in pos.items():
         ax.add_patch(Circle((x, y), r, fc=COMP_C, ec=COMP_E, lw=0.8))
-        ax.text(x, y, c, ha="center", va="center", fontsize=6 if len(c) < 5 else 4.8)
+        ax.text(x, y, c, ha="center", va="center", fontsize=5.5 if len(c) < 5 else 5)
 
     def anchor(name, toward):
         if name in pos:
@@ -211,6 +216,11 @@ def schematic(ax, ir):
 
     for s, d in sorted(lk):
         p, q = anchor(s, centre(d)), anchor(d, centre(s))
+        if s in boxes and d in boxes:  # between stacked fields: right of centre, clear of the axis labels
+            def below(name, y):  # an end at a block's bottom starts under its axis arrow
+                return y - 0.2 if abs(y - boxes[name][1]) < 1e-9 else y
+            p = (boxes[s][0] + 0.85 * boxes[s][2], below(s, p[1]))
+            q = (boxes[d][0] + 0.85 * boxes[d][2], below(d, q[1]))
         ax.add_patch(FancyArrowPatch(p, q, arrowstyle="-|>", mutation_scale=7, lw=0.8, color=COMP_E,
                                      connectionstyle=f"arc3,rad={bend(s, d, lk)}"))
     for dose in ir["doses"]:
@@ -240,14 +250,16 @@ def thumbnail(ax, ir, run, view):
         norm, u = Normalize(0, top), np.clip(u, 0, None)
     tf = np.concatenate([t[:1], (t[1:] + t[:-1]) / 2, t[-1:]])
     ax.pcolormesh(tf, y, u.T, norm=norm, cmap="viridis", shading="flat", rasterized=True)
-    ax.set_xlabel("time", fontsize=6, labelpad=1)
-    ax.set_ylabel(f"{f['name']}: {label}", fontsize=6, labelpad=1)
-    ax.tick_params(labelsize=5, length=2, pad=1)
+    ax.set_xlabel("Time", fontsize=ps.SIZE - 0.5, labelpad=1)
+    ax.set_ylabel(f"{f['name']}: {label}", fontsize=ps.SIZE - 0.5, labelpad=1)
+    ax.tick_params(labelsize=5.5, length=2, pad=1)
 
 
 def main():
-    fig = plt.figure(figsize=(11, 10.5))
-    outer = fig.add_gridspec(3, 4, hspace=0.42, wspace=0.28, left=0.03, right=0.99, top=0.96, bottom=0.04)
+    ps.setup()
+    fig = plt.figure(figsize=(ps.WIDTH, 9.4))
+    outer = fig.add_gridspec(4, 3, hspace=0.38, wspace=0.36, left=0.065, right=0.978, top=0.965, bottom=0.035)
+    panels = []
     version = None
     for k, (key, (name, title, ref)) in enumerate(MAIN.items()):
         p = RESULTS / f"{key}.json"
@@ -259,16 +271,18 @@ def main():
         run = data["models"][name][view.get("run", "first")]
         ir = run["ir"]
         run["size_of"] = {f["name"]: int(np.prod([sizes(ir)[a] for a in f["axes"]])) for f in ir["fields"]}
-        cell = outer[k // 4, k % 4].subgridspec(2, 1, height_ratios=[1.25, 1], hspace=0.12)
+        cell = outer[k // 3, k % 3].subgridspec(2, 1, height_ratios=[1.25, 1], hspace=0.12)
         ax_s = fig.add_subplot(cell[0])
         schematic(ax_s, ir)
         states = int(sum(np.prod([sizes(ir)[a] for a in f["axes"]]) for f in ir["fields"]) + len(ir["compartments"]))
-        ax_s.set_title(f"{key}  {title}\n{ref}; {states:,} states", fontsize=7.5, loc="left", pad=2)
+        ax_s.set_title(f"{key}  {title}\n{ref}; {states:,} states", fontsize=6.5, loc="left", pad=2)
         ax_t = fig.add_subplot(cell[1])
         thumbnail(ax_t, ir, run, view)
+        panels += [ax_s, ax_t]
+    ps.check(fig, panels)
     OUT.mkdir(exist_ok=True)
     for ext in ("png", "pdf"):
-        fig.savefig(OUT / f"fig4_gallery.{ext}", dpi=200)
+        fig.savefig(OUT / f"fig4_gallery.{ext}")
     print(f"wrote {OUT / 'fig4_gallery.png'} (TenQSP {version})")
 
 

@@ -5,17 +5,17 @@
  "device": "gpu",
  "states": 6,
  "members": 1024,
- "first_s": 3.9527526404708624,
- "batch_s": 0.1727014873176813,
- "per_member_s": 0.00016865379620867316,
+ "first_s": 3.8095563873648643,
+ "batch_s": 0.22876480966806412,
+ "per_member_s": 0.00022340313444146886,
  "failed": 0,
- "peak_gb": 2.35068,
- "peak_gpu_gb": 0.117453824,
+ "peak_gb": 2.559164,
+ "peak_gpu_gb": 0.171982592,
  "gpu": "NVIDIA RTX A6000",
  "versions": {
-  "tenqsp": "0.8.4.dev0",
-  "jax": "0.11.2",
+  "tenqsp": "0.8.3",
+  "jax": "0.12.0.1",
   "python": "3.12.15"
  },
- "load_at_start": 30.9
+ "load_at_start": 3.81
 }

@@ -4,11 +4,15 @@
 maturation written as an axis (models/friberg_maturation.tq), to a simulated dose-ranging
 study (20 patients at 60, 90 or 120 mg, 8 counts each; circ0 and slope vary between patients,
 lognormal sdlog 0.3; 15 % error), by method laplace (FOCE-I), as in tenqsp-fit's tutorial 4.
-Writes results/fig5/friberg_estimates.csv and friberg_data.csv (a few minutes).
+Writes results/fig5/friberg_estimates.csv, friberg_data.csv and friberg_time.json (the fit's
+wall time; run on an idle machine for the paper's number) (a few minutes).
 
     python figures/fig5_friberg.py
 """
 
+import json
+import os
+import time
 import warnings
 
 import numpy as np
@@ -47,10 +51,12 @@ def main():
     p.estimate("gamma", 0.25)
     p.error("ANC", tf.proportional(0.2))
     p.method("laplace")
-    p.options(progress="none")
+    p.options(seed=1, progress="none")
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
+        t0 = time.perf_counter()
         r = tf.fit(p)
+        seconds = time.perf_counter() - t0
     truth = {"circ0.median": TRUE["circ0"], "slope.median": TRUE["slope"], "MTT": TRUE["MTT"],
              "gamma": TRUE["gamma"], "circ0.sdlog": OMEGA, "slope.sdlog": OMEGA, "ANC.proportional": 0.15}
     t = r.table().set_index("quantity")
@@ -61,6 +67,8 @@ def main():
     RESULTS.mkdir(parents=True, exist_ok=True)
     est.to_csv(RESULTS / "friberg_estimates.csv", index=False)
     data.to_csv(RESULTS / "friberg_data.csv", index=False)
+    (RESULTS / "friberg_time.json").write_text(json.dumps(
+        {"seconds": seconds, "load_at_end": os.getloadavg()[0], "cpus": os.cpu_count()}, indent=1))
     # typical patient at each dose, at the estimates
     tt = np.linspace(0, 504, 253)
     fixed = {"circ0": r.estimates["circ0.median"], "slope": r.estimates["slope.median"],
