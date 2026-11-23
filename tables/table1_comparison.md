@@ -66,13 +66,13 @@ simulators; no pharmacometric data or population estimation documented [42, 43].
 4. Cheng & Li 2026, full text (preprint)
 5. Monolix 2024R1 documentation, "Delay differential equations"
 6. NONMEM Users Guide Part VI (PREDPP), compact arrays appendix
-7. NONMEM users' cookbook, "Accuracy" (gradients)
+7. NONMEM users' cookbook, "Accuracy control" (gradients)
 8. Grenier et al. 2014, doi:10.1051/m2an/2013140; PAGE 2013 abstract "Extending Monolix to use models with partial differential equations"
 9. Monolix 2024R1 documentation, "SAEM"
 10. Monolix 2024R1 documentation, "Standard errors"
 11. rxode2 documentation (home page)
 12. rxode2 vignette, "Delay differential equations"
-13. rxode2 vignette, "Event types"
+13. rxode2 vignette, "Dosing event types"
 14. Torsten documentation (metrumresearchgroup.github.io/Torsten)
 15. nlmixr2est 7.2.1, `foceiControl` reference; Almquist, Leander, Jirstrand, J Pharmacokinet Pharmacodyn 2015;42:191-209, doi:10.1007/s10928-015-9409-1
 16. Stan User's Guide, "Ordinary differential equations" and "Adjoint ODE solver"
