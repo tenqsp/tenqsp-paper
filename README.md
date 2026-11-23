@@ -92,7 +92,7 @@ the installed TenQSP version, as for Table 2.
 | `python figures/fig5_theoph.py --dispersion` | panel D: the same data fitted with transport with an estimated dispersion, on 20 and 40 cells | about 35 min |
 | `python figures/fig5_friberg.py` | panels E-F: Friberg's myelosuppression model fitted to a simulated dose-ranging study | about 1 min |
 | `python figures/fig5_estimation.py` | draws the figure from `results/` | seconds |
-| `python checks/nonmem/friberg_nonmem.py` | the Friberg fit against NONMEM's on the same data, from the same starts (Table S3); `... data` writes the data file for `checks/nonmem/friberg.ctl`, whose NONMEM estimates are stored in `results/nonmem/friberg.ext` | seconds (NONMEM: needs a licence) |
+| `python checks/nonmem/friberg_nonmem.py` | the Friberg fit against NONMEM's on the same data, from the same starts (Table S1); `... data` writes the data file for `checks/nonmem/friberg.ctl`, whose NONMEM estimates are stored in `results/nonmem/friberg.ext` | seconds (NONMEM: needs a licence) |
 
 The fits use tenqsp-fit (in `requirements.txt`). Models: `figures/transit_fit.py` (the
 transit model with dispersion that simulates the studies, and the chains that fit them) and

@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
 """Friberg's model fitted by tenqsp-fit (figures/fig5_friberg.py) and by NONMEM 7.6 on the same
-simulated study, from the same starts, both by FOCE-I (NONMEM: METHOD=1 INTER). Table S3.
+simulated study, from the same starts, both by FOCE-I (NONMEM: METHOD=1 INTER). Table S1.
 
     python checks/nonmem/friberg_nonmem.py data    # writes checks/nonmem/friberg_nm.csv
     nmfe76 friberg.ctl friberg.lst                 # in checks/nonmem (needs a NONMEM licence)
-    python checks/nonmem/friberg_nonmem.py         # Table S3 from results/
+    python checks/nonmem/friberg_nonmem.py         # Table S1 from results/
 
 The table reads tenqsp-fit's estimates from results/fig5/friberg_estimates.csv and NONMEM's
 from results/nonmem/friberg.ext (copy friberg.ext there after a NONMEM run). NONMEM's
@@ -79,7 +79,7 @@ def table():
     fit = json.loads((ROOT / "results" / "fig5" / "friberg_time.json").read_text())
     print(f", tenqsp-fit {fit['m2ll']:.3f}" if "m2ll" in fit else " (tenqsp-fit's: rerun fig5_friberg.py)")
     (ROOT / "out").mkdir(exist_ok=True)
-    out.to_csv(ROOT / "out" / "tableS3_nonmem.csv", index=False)
+    out.to_csv(ROOT / "out" / "tableS1_nonmem.csv", index=False)
 
 
 if __name__ == "__main__":
