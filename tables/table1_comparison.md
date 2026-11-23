@@ -20,7 +20,7 @@ TenQSP 0.9.1 with tenqsp-fit 0.3.0.
 
 **Not in the table** (no column: they do not target the same problem, or document too little
 of it). Pumas: proprietary; population estimation on DifferentialEquations.jl, documented for
-ODE, DAE and SDE models; PDEs not documented [28, 38]. SimBiology (MATLAB): ODE models with
+ODE, DDE and SDE models; PDEs not documented [28, 38]. SimBiology (MATLAB): ODE models with
 population estimation (`sbiofitmixed`: nlmefit, nlmefitsa); PDEs not documented [39]. PK-Sim
 and MoBi (Open Systems Pharmacology): open-source PBPK, organs with their vascular,
 interstitial and cellular spaces as a fixed structure, population simulation, and parameter
