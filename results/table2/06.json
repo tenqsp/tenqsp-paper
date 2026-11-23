@@ -11,7 +11,7 @@
   "clearance_vs_ps": 9.518045906986572e-09
  },
  "tutorial": "06_whole_body_pbpk.py",
- "tenqsp": "0.8.3",
- "seconds": 8.0,
- "seconds_extraction": 0.6
+ "tenqsp": "0.9.1",
+ "seconds": 7.8,
+ "seconds_extraction": 0.7
 }

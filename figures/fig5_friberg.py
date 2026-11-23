@@ -68,7 +68,8 @@ def main():
     est.to_csv(RESULTS / "friberg_estimates.csv", index=False)
     data.to_csv(RESULTS / "friberg_data.csv", index=False)
     (RESULTS / "friberg_time.json").write_text(json.dumps(
-        {"seconds": seconds, "load_at_end": os.getloadavg()[0], "cpus": os.cpu_count()}, indent=1))
+        {"m2ll": float(r.m2ll), "status": r.status, "seconds": seconds,
+         "load_at_end": os.getloadavg()[0], "cpus": os.cpu_count()}, indent=1))
     # typical patient at each dose, at the estimates
     tt = np.linspace(0, 504, 253)
     fixed = {"circ0": r.estimates["circ0.median"], "slope": r.estimates["slope.median"],

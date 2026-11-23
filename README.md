@@ -87,10 +87,12 @@ the installed TenQSP version, as for Table 2.
 
 | Command | What it does | Time |
 |---|---|---|
-| `python figures/fig5_runs.py` | panels A-C: 20 simulated studies, each fitted with chains of 3 to 60 transit compartments | about 2 h on 40 processes (64 cores) |
-| `python figures/fig5_theoph.py` | panel D: the theophylline data fitted with first-order absorption and chains of 1 to 20 | about 2 h (the chain of 20 is the slowest) |
-| `python figures/fig5_friberg.py` | panels E-F: Friberg's myelosuppression model fitted to a simulated dose-ranging study | one fit |
+| `python figures/fig5_runs.py` | panels A-C: 20 simulated studies, each fitted with chains of 3 to 60 transit compartments | about 10 min on 16 processes |
+| `python figures/fig5_theoph.py` | panel D: the theophylline data fitted with first-order absorption and chains of 1 to 20 | about 3 min (one process per fit) |
+| `python figures/fig5_theoph.py --dispersion` | panel D: the same data fitted with transport with an estimated dispersion, on 20 and 40 cells | about 35 min |
+| `python figures/fig5_friberg.py` | panels E-F: Friberg's myelosuppression model fitted to a simulated dose-ranging study | about 1 min |
 | `python figures/fig5_estimation.py` | draws the figure from `results/` | seconds |
+| `python checks/nonmem/friberg_nonmem.py` | the Friberg fit against NONMEM's on the same data, from the same starts (Table S3); `... data` writes the data file for `checks/nonmem/friberg.ctl`, whose NONMEM estimates are stored in `results/nonmem/friberg.ext` | seconds (NONMEM: needs a licence) |
 
 The fits use tenqsp-fit (in `requirements.txt`). Models: `figures/transit_fit.py` (the
 transit model with dispersion that simulates the studies, and the chains that fit them) and

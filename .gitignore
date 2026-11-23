@@ -4,3 +4,7 @@ __pycache__/
 .ipynb_checkpoints/
 CLAUDE.md
 .claude/
+# NONMEM run files in checks/nonmem (keep the control stream and the script)
+checks/nonmem/*
+!checks/nonmem/friberg.ctl
+!checks/nonmem/friberg_nonmem.py

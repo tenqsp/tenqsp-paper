@@ -1,22 +1,33 @@
-# Table 1: what each tool offers (draft, checked 2026-11-16)
+# Table 1: what each tool offers (draft, checked 2026-11-16; revised 2026-11-23 after review)
 
 Written by hand from each tool's documentation; every cell has a source below. "Not
 documented" means we found nothing in the documentation, not that the feature is known to
 be absent. Versions: NONMEM 7.5.1/7.6.0, Monolix 2024R1, rxode2 5.1.8 and nlmixr2est 7.2.1,
 Stan with Torsten 0.92, FiPy, py-pde, DifferentialEquations.jl with MethodOfLines.jl,
-TenQSP 0.8.3 with tenqsp-fit 0.2.
+TenQSP 0.9.1 with tenqsp-fit 0.3.0.
 
 | | NONMEM | Monolix | nlmixr2 / rxode2 | Stan / Torsten | FiPy | py-pde | DifferentialEquations.jl + MethodOfLines.jl | TenQSP + tenqsp-fit |
 |---|---|---|---|---|---|---|---|---|
-| Equations over an axis (age, maturation, depth, trait): PDEs | by hand: the user writes the method-of-lines ODEs; templates (DOPDE, DOEXPAND) help [1, 2] | no (ODEs and DDEs) [5]; a research extension exists [8] | by hand (no PDE construct documented) [11] | by hand (no PDE construct documented) [16] | yes (finite volumes) [17] | yes (finite differences, method of lines) [19] | yes (symbolic PDEs, discretized automatically) [21] | yes (finite volumes, written as in a paper) |
-| Delays | DDE solvers; distributed delays and transit chains by `ddexpand` [2, 3] | `delay()`, constant delays (estimable); transit absorption [5] | `delay()`, transit and lag functions [12] | no DDE solver documented [16b] | not documented | not documented | DDE solvers [22] | as an axis (a chain of transit compartments, or transport without spread); dose lags |
-| Pharmacometric dosing and data | yes (the reference data format) [2] | yes [5] | yes, NONMEM conventions [13] | yes, NONMEM-style events (Torsten) [14] | no | no | through callbacks [23] | boluses, infusions, regimens, lags, bioavailability; NONMEM-style data in tenqsp-fit |
-| Compartments and fields in one model | by hand [4] | no | by hand | by hand | not documented | not documented | partly (connectors join a discretized PDE to lumped parts) [24] | yes |
+| Equations over an axis (age, maturation, depth, trait): PDEs | by hand: the user writes the method-of-lines ODEs; templates (DOPDE, DOEXPAND) help [1, 2] | by hand: the user writes the method-of-lines ODEs (no PDE construct documented) [5]; a research extension exists [8] | by hand (no PDE construct documented) [11] | by hand (no PDE construct documented) [16] | yes (finite volumes) [17] | yes (finite differences, method of lines) [19] | yes (symbolic PDEs, discretized automatically) [21] | yes (finite volumes, written as in a paper) |
+| Delays | DDE solvers; distributed delays and transit chains by `ddexpand` [2, 3] | `delay()`, constant delays (estimable); transit absorption [5] | `delay()`, transit and lag functions [12] | no DDE solver documented [16b] | not documented | not documented | DDE solvers [22] | as an axis (a chain of transit compartments, or transport with or without spread); dose lags; no DDE solver |
+| Pharmacometric dosing and data | yes (the reference data format) [2] | yes [5] | yes, NONMEM conventions [13] | yes, NONMEM-style events (Torsten) [14] | no | no | through callbacks [23] | boluses, infusions, regimens, lags, bioavailability; NONMEM-style data in tenqsp-fit, which refuses records it would read differently (steady-state doses, resets) |
+| Compartments and fields in one model | by hand [4] | by hand | by hand | by hand | not documented | not documented | partly (connectors join a discretized PDE to lumped parts) [24] | yes |
 | Conservation ledger | not documented | not documented | not documented | not documented | not documented | not documented | not documented | yes, for every model |
 | Exact derivatives of the solution | sensitivities to the random effects; finite differences for the fixed effects unless `FAST` (all MU-referenced) [2, 6, 7] | not documented [9, 10] | forward sensitivity equations; outer gradient by finite differences unless `fast=TRUE` [11, 15] | yes (automatic differentiation; forward and adjoint sensitivities) [16] | not documented | not documented | yes (forward, adjoint, automatic differentiation) [25] | yes (JAX: forward mode, or reverse by replay) |
-| Population estimation | yes (FO, FOCE, Laplace, SAEM, IMP, Bayes) [2] | yes (SAEM) [9] | yes (FOCEi, SAEM and others) [15, 26] | yes (full Bayes) [14, 27] | no | no | not in these packages (Pumas is proprietary) [28] | yes (FOCE-I; Bayes by NUTS) |
-| Open source | no [29] | no (free academic licence) [30] | yes, GPL-3 [31] | yes, BSD-3 [32] | yes, NIST terms [33] | yes, MIT [32] | yes, MIT [32] | yes, Apache-2.0 |
-| Batches on a GPU | not documented (MPI across subjects) [2] | not documented (threads, clusters) [34] | not documented (threads across subjects) [11] | partly (OpenCL for some functions; MPI group solvers) [35, 36] | partly (GPU linear solver) [18] | not documented [19] | yes [37] | yes (JAX; Table 3) |
+| Population estimation | yes (FO, FOCE, Laplace, SAEM, IMP, Bayes) [2] | yes (SAEM) [9] | yes (FOCEi, SAEM and others) [15, 26] | yes (full Bayes) [14, 27] | no | no | not in these packages (Pumas is proprietary) [28] | yes (FOCE-I; Bayes by NUTS); no SAEM or importance sampling |
+| Open source | no [29] | no (free academic license) [30] | yes, GPL-3 [31] | yes, BSD-3 [32] | yes, NIST terms [33] | yes, MIT [32] | yes, MIT [32] | yes, Apache-2.0 |
+| Batches on a GPU | not documented (MPI across subjects) [2] | not documented (threads, clusters) [34] | not documented (threads across subjects) [11] | partly (OpenCL for some functions; MPI group solvers) [35, 36] | partly (GPU linear solver) [18] | not documented [19] | yes [37] | yes (JAX; Table S2) |
+
+**Not in the table** (no column: they do not target the same problem, or document too little
+of it). Pumas: proprietary; population estimation on DifferentialEquations.jl, documented for
+ODE, DAE and SDE models; PDEs not documented [28, 38]. SimBiology (MATLAB): ODE models with
+population estimation (`sbiofitmixed`: nlmefit, nlmefitsa); PDEs not documented [39]. PK-Sim
+and MoBi (Open Systems Pharmacology): open-source PBPK, organs with their vascular,
+interstitial and cellular spaces as a fixed structure, population simulation, and parameter
+identification through an R package [40]. Virtual Cell: open-source reaction-diffusion in
+cell geometries by finite volumes; its parameter estimation (COPASI) is for non-spatial
+models [41]. PhysiCell (with BioFVM) and Chaste: open-source agent-based and continuum tissue
+simulators; no pharmacometric data or population estimation documented [42, 43].
 
 ## Points to word carefully in the text
 
@@ -85,3 +96,9 @@ TenQSP 0.8.3 with tenqsp-fit 0.2.
 35. CmdStan guide, "Parallelization"
 36. Torsten documentation, population ODE group solvers
 37. DiffEqGPU.jl documentation
+38. Pumas documentation (docs.pumas.ai), "Analytical solutions and differential equations"
+39. SimBiology documentation, `sbiofitmixed` and "Nonlinear mixed-effects modeling" (MathWorks)
+40. Open Systems Pharmacology Suite documentation and GitHub (Open-Systems-Pharmacology/Suite; OSPSuite.ParameterIdentification)
+41. Virtual Cell help, "Parameter estimation overview" (vcell.org)
+42. Ghaffarizadeh et al. PhysiCell. PLoS Comput Biol 2018;14(2):e1005991, doi:10.1371/journal.pcbi.1005991
+43. Cooper et al. Chaste: Cancer, Heart and Soft Tissue Environment. J Open Source Softw 2020;5(47):1848, doi:10.21105/joss.01848

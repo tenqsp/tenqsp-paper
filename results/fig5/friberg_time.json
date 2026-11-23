@@ -1,5 +1,7 @@
 {
- "seconds": 275.61181611195207,
- "load_at_end": 3.96,
+ "m2ll": 296.63832877143204,
+ "status": "converged",
+ "seconds": 10.929996952414513,
+ "load_at_end": 11.53,
  "cpus": 64
 }

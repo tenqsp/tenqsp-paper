@@ -8,7 +8,7 @@
   "steady_liquid": 0.0001640035044347954
  },
  "tutorial": "10_biofilm_penetration.py",
- "tenqsp": "0.8.3",
+ "tenqsp": "0.9.1",
  "seconds": 3.4,
  "seconds_extraction": 0.7
 }

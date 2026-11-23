@@ -6,15 +6,15 @@
  "states": 6,
  "members": 1024,
  "cores": 64,
- "first_s": 4.812393447384238,
- "batch_s": 1.4944055452942848,
- "per_member_s": 0.00145938041532645,
+ "first_s": 4.80809704773128,
+ "batch_s": 1.5390394199639559,
+ "per_member_s": 0.0015029681835585507,
  "failed": 0,
- "peak_gb": 0.584012,
+ "peak_gb": 0.5781,
  "versions": {
-  "tenqsp": "0.8.3",
+  "tenqsp": "0.9.1",
   "jax": "0.12.0.1",
   "python": "3.12.15"
  },
- "load_at_start": 18.34
+ "load_at_start": 11.96
 }
