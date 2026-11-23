@@ -2,8 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Figure 1: from equations to estimates, on Friberg's myelosuppression model with the
 maturation chain written as an axis (models/friberg_maturation.tq). Everything shown is
-TenQSP's own output for that file; panel F is the fit of Figure 5 (run fig5_friberg.py
-first).
+TenQSP's own output for that file and, in panel F, for the same file with one symbol changed.
 
     python figures/fig1_concept.py     # writes out/fig1_concept.png and .pdf (under a minute)
 
@@ -14,10 +13,12 @@ B  the equations TenQSP reads from it (m.to_latex(), shown here with matplotlib'
 C  what TenQSP makes of them (m.explain(), excerpts)
 D  a run after a 90 mg dose: proliferating cells, the 3 maturation cells, circulating
    neutrophils; and the conservation ledger's largest unexplained part
-E  exact derivatives of the neutrophil count with respect to the parameters (JAX, forward
+E  derivatives of the neutrophil count with respect to the parameters (JAX, forward
    mode), as relative sensitivities d log ANC / d log theta
-F  a population fit with tenqsp-fit (laplace, FOCE-I; the code is in fig5_friberg.py): 20
-   simulated patients at 3 doses, the typical profiles at the estimates
+F  a slip caught: the file with one symbol changed (Circ's inflow divided by MTT instead of
+   T_mat), and the transfer explain() pairs, as written and with the slip: the amount entering
+   Circ no longer matches the amount leaving the axis. The ledger still closes, since it books
+   what the equations say (the fit of Figure 3E-F is not repeated here)
 """
 
 import re
@@ -31,9 +32,8 @@ import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import tenqsp as tq
-from transit_fit import RESULTS, ROOT
+from transit_fit import ROOT
 
 jax.config.update("jax_enable_x64", True)
 
@@ -121,6 +121,34 @@ def runs():
     return m, sol, days, rel, f.derivatives
 
 
+SLIP = ("d_t(Circ) = Transit(z=1)/T_mat", "d_t(Circ) = Transit(z=1)/MTT")
+
+
+def transfer_line(text):
+    """explain()'s line for the transfer from the end of the axis into Circ."""
+    return next(ln.strip() for ln in text.splitlines() if "Circ +1" in ln)
+
+
+def slip_panel():
+    """Panel F's text: the changed line and explain()'s pairing before and after."""
+    good = MODEL.read_text()
+    bad = good.replace(*SLIP)
+    assert bad != good
+    ok = transfer_line(str(tq.Model.from_text(good).explain()))
+    wrong = transfer_line(str(tq.Model.from_text(bad).explain()))
+    ledger = max(tq.Model.from_text(bad).solve((0, 504), times=[0, 504], regimen=tq.bolus("Ac", DOSE, times=[0]),
+                                               rtol=1e-8, atol=1e-10).ledger.check().values())
+
+    def wrap(s, ind="  "):
+        return textwrap.wrap(s, WIDTH, initial_indent=ind, subsequent_indent=ind + "  ")
+
+    lines = ["As written:", *wrap(SLIP[0] + " - ktr*Circ"), "With a slip:", *wrap(SLIP[1] + " - ktr*Circ"), "",
+             "m.explain(), the transfer into Circ:", "as written", *wrap(ok), "with the slip", *wrap(wrong), "",
+             *textwrap.wrap("Entering Circ no longer equals leaving the axis. "
+                            f"The ledger still closes ({ledger:.0e}): it books what the equations say.", WIDTH)]
+    return "\n".join(lines)
+
+
 def text_panel(ax, title, body, size=SIZE, family="monospace"):
     ax.axis("off")
     ax.set_title(title, loc="left")
@@ -201,22 +229,12 @@ def main():
         ax.plot(days, rel[:, j], "o-", ms=2, lw=0.9, label=name)
     ax.axhline(0, c="k", lw=0.5)
     ax.set(xlabel="Time (days)", ylabel="d log ANC / d log $\\theta$")
-    ax.set_title(f"E  Exact derivatives (JAX, {mode} mode)", loc="left")
+    ax.set_title(f"E  Sensitivities (JAX, {mode} mode)", loc="left")
     ax.legend(ncol=2, loc="lower left", frameon=False)
 
     # F
     ax = fig.add_subplot(gs[2, 1])
-    fdata = pd.read_csv(RESULTS / "friberg_data.csv")
-    ftyp = pd.read_csv(RESULTS / "friberg_typical.csv")
-    dose = fdata[fdata.EVID == 1].groupby("ID").AMT.first()
-    obs = fdata[fdata.EVID == 0].assign(dose=lambda x: x.ID.map(dose))
-    for amt, c in {60: "C0", 90: "C1", 120: "C3"}.items():
-        o = obs[obs.dose == amt]
-        ax.plot(o.TIME / 24, o.DV, ".", c=c, ms=2.5, alpha=0.6)
-        ax.plot(ftyp.t / 24, ftyp[f"dose_{amt}"], c=c, label=f"{amt} mg")
-    ax.set(yscale="log", xlabel="Time (days)", ylabel="ANC (10$^9$/L)", ylim=(0.2, 15))
-    ax.set_title("F  A population fit (tenqsp-fit, FOCE-I)", loc="left")
-    ax.legend(loc="lower right", frameon=False)
+    check_fits(fig, ax, [text_panel(ax, "F  A slip, caught by m.explain()", slip_panel(), size=SIZE - 0.3)])
 
     OUT.mkdir(exist_ok=True)
     for ext in ("png", "pdf"):

@@ -34,7 +34,9 @@ import transit_fit as tr
 
 OUT = tr.ROOT / "out"
 SHOWN = {3: "C3", 25: "C0", 60: "C2"}
-PARAMS = {"MTT": "C0", "ka": "C1", "CL": "C2", "V": "C3"}
+PARAMS = {"MTT": "C0", "MTT + 1/ka": "C1", "CL": "C2", "V": "C3"}  # ka alone collapses onto N/MTT for N <= 20
+NAMES = {"circ0.median": "Circ$_0$", "slope.median": "Slope", "MTT": "MTT", "gamma": "$\\gamma$",
+         "circ0.sdlog": "$\\omega$ Circ$_0$", "slope.sdlog": "$\\omega$ Slope", "ANC.proportional": "$\\sigma$ (proportional)"}
 DOSES = {60: "C0", 90: "C1", 120: "C3"}
 
 
@@ -74,7 +76,11 @@ def main():
     # B
     ns = np.array(tr.CHAINS)
     for k, c in PARAMS.items():
-        r = fits.pivot(index="N", columns="study", values=k).loc[ns] / tr.TRUE[k]
+        if k == "MTT + 1/ka":
+            v = fits.assign(total=fits.MTT + 1 / fits.ka).pivot(index="N", columns="study", values="total")
+            r = v.loc[ns] / (tr.TRUE["MTT"] + 1 / tr.TRUE["ka"])
+        else:
+            r = fits.pivot(index="N", columns="study", values=k).loc[ns] / tr.TRUE[k]
         ax[1].plot(ns, r.median(axis=1), "o-", c=c, ms=2.5, label=k)
         ax[1].fill_between(ns, r.quantile(0.1, axis=1), r.quantile(0.9, axis=1), color=c, alpha=0.15, lw=0)
     ax[1].axhline(1, c="k", lw=0.8)
@@ -125,7 +131,7 @@ def main():
     ax[4].errorbar(fri.estimate / fri.true, y, xerr=[(fri.estimate - fri.lo) / fri.true, (fri.hi - fri.estimate) / fri.true],
                    fmt="o", c="k", ms=2.5, capsize=1.5, lw=0.8)
     ax[4].axvline(1, c="k", lw=0.8)
-    ax[4].set_yticks(y, fri.quantity)
+    ax[4].set_yticks(y, [NAMES.get(q, q) for q in fri.quantity])
     ax[4].set(xlabel="Estimate / truth (95% interval)", title="E  Friberg model, estimates")
 
     # F

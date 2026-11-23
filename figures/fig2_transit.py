@@ -68,7 +68,9 @@ def main():
     ax[2].plot(ns, r["eig"], "o", c="C0", label="TenQSP Jacobian")
     ax[2].plot(ns, r["sim"], "x", c="k", ms=5, label="TenQSP simulation")
     ax[2].axhline(r["root_delay"], c="k", ls="--", lw=1, label="fixed delay")
-    ax[2].plot([60], [r["sim_delay"]], "x", c="k", ms=5)
+    # the fixed delay has no N: its simulated rate sits on the right edge, on its dashed line
+    edge = matplotlib.transforms.blended_transform_factory(ax[2].transAxes, ax[2].transData)
+    ax[2].plot([0.97], [r["sim_delay"]], "x", c="k", ms=5, transform=edge, clip_on=False)
     ax[2].set_xscale("log")
     ax[2].set_xlim(0.8, 80)
     ax[2].set(xlabel="Eclipse compartments N", ylabel="Early growth rate (1/day)",

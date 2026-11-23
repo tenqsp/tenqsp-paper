@@ -1,9 +1,9 @@
 model spheroid_lorz2015
 # Lorz A, Lorenzi T, Clairambault J, Escargueil A, Perthame B. Bull Math Biol 2015;77:1-22.
-# Cancer cells n over the distance from the centre r and a resistance level x, both
-# normalised to [0, 1]; nutrient s, a cytotoxic drug c1 and a cytostatic drug c2 diffuse in
+# Cancer cells n over the distance from the center r and a resistance level x, both
+# normalized to [0, 1]; nutrient s, a cytotoxic drug c1 and a cytostatic drug c2 diffuse in
 # from the surface. Dimensionless.
-axis r in [0, 1] n=40 geometry=spherical    # distance from the centre
+axis r in [0, 1] n=40 geometry=spherical    # distance from the center
 axis x in [0, 1] n=100                          # resistance level (1: the most resistant)
 
 param mu2=10, sig_s=0.2, sig_c=0.2, g_s=1, g_c=1  # eq 2.12

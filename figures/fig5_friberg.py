@@ -26,7 +26,8 @@ OMEGA = 0.3
 DAYS = np.array([0, 3, 7, 9, 11, 14, 18, 21])
 
 
-def main():
+def problem():
+    """The simulated study and its fit problem, as in the paper."""
     model = tq.Model.from_text((ROOT / "models" / "friberg_maturation.tq").read_text())
     rng = np.random.default_rng(1)
     rows = []
@@ -52,6 +53,11 @@ def main():
     p.error("ANC", tf.proportional(0.2))
     p.method("laplace")
     p.options(seed=1, progress="none")
+    return model, data, p
+
+
+def main():
+    model, data, p = problem()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         t0 = time.perf_counter()

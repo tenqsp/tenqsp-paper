@@ -108,10 +108,10 @@ CASES = [
     ("whole-body PBPK, 9 organs x 3 spaces", "6", pbpk),
     ("influenza, eclipse on 40 cells", "2", eclipse),
     ("transit with dispersion, 200 cells (sharp)", "5", dispersion),
-    ("tumour spheroid, 10 x 25 cells", "7", spheroid(10, 25)),
-    ("tumour spheroid, 20 x 50 cells", "7", spheroid(20, 50)),
-    ("tumour spheroid, 40 x 100 cells", "7", spheroid(40, 100)),
-    ("tumour spheroid, 80 x 200 cells", "7", spheroid(80, 200)),
+    ("tumor spheroid, 10 x 25 cells", "7", spheroid(10, 25)),
+    ("tumor spheroid, 20 x 50 cells", "7", spheroid(20, 50)),
+    ("tumor spheroid, 40 x 100 cells", "7", spheroid(40, 100)),
+    ("tumor spheroid, 80 x 200 cells", "7", spheroid(80, 200)),
 ]
 
 

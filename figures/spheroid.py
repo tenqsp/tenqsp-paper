@@ -4,7 +4,8 @@
 schedules and the solver settings. Used by fig7_runs.py, fig7_gradients.py and fig7_spheroid.py.
 
 Two modes: "full" (the paper's grid, 40 depth cells x 100 resistance levels) and "quick"
-(20 x 50; every reported number within about 3 % of the full grid, see Supplement S5).
+(20 x 50; for trying the scripts: within 9 % of the full grid for a saturable kill, up to 24 % for
+the linear kill, see Supplement S8).
 """
 
 import re

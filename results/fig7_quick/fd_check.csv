@@ -1,0 +1,42 @@
+objective,input,reverse,finite_differences,relative_difference,ok
+mean burden,dose 1 time,-2.139985e-08,-2.049806e-08,2.23e-04,1
+mean log burden,dose 1 time,-2.457743e-04,-2.463088e-04,1.61e-03,1
+log burden at the end,dose 1 time,-2.908419e-07,-2.963099e-07,1.88e-05,1
+resistance at the end,dose 1 time,1.374183e-08,1.152142e-08,3.12e-05,1
+mean burden,dose 1 amount,-2.138359e-05,-2.138412e-05,2.48e-05,1
+mean log burden,dose 1 amount,-1.665384e-03,-1.665375e-03,5.56e-06,1
+log burden at the end,dose 1 amount,1.506695e-04,1.506731e-04,2.44e-05,1
+resistance at the end,dose 1 amount,6.292529e-05,6.292685e-05,2.48e-05,1
+mean burden,dose 24 time,-1.921767e-09,-1.912060e-09,2.40e-06,1
+mean log burden,dose 24 time,2.336504e-05,2.329986e-05,1.96e-04,1
+log burden at the end,dose 24 time,-1.483063e-07,-1.483876e-07,2.79e-07,1
+resistance at the end,dose 24 time,-1.943583e-09,-1.969102e-09,3.59e-07,1
+mean burden,dose 24 amount,-2.141165e-05,-2.141218e-05,2.45e-05,1
+mean log burden,dose 24 amount,-4.897349e-04,-4.897405e-04,1.14e-05,1
+log burden at the end,dose 24 amount,1.501791e-04,1.501827e-04,2.38e-05,1
+resistance at the end,dose 24 amount,6.293240e-05,6.293392e-05,2.42e-05,1
+mean burden,dose 44 time,1.567049e-06,1.567250e-06,4.96e-05,1
+mean log burden,dose 44 time,3.134780e-05,3.132256e-05,7.60e-05,1
+log burden at the end,dose 44 time,-9.519871e-04,-9.522807e-04,3.08e-04,1
+resistance at the end,dose 44 time,-7.672739e-06,-7.673270e-06,7.46e-06,1
+mean burden,dose 44 amount,-2.046279e-05,-2.046328e-05,2.40e-05,1
+mean log burden,dose 44 amount,-4.011953e-04,-4.012012e-04,1.47e-05,1
+log burden at the end,dose 44 amount,-3.648331e-04,-3.648324e-04,1.74e-06,1
+resistance at the end,dose 44 amount,5.658057e-05,5.658200e-05,2.52e-05,1
+mean burden,dose 46 time,6.731061e-06,6.732907e-06,2.74e-04,1
+mean log burden,dose 46 time,1.242103e-04,1.242190e-04,2.62e-05,1
+log burden at the end,dose 46 time,-4.788836e-03,-4.790419e-03,3.30e-04,1
+resistance at the end,dose 46 time,-9.468303e-06,-9.463187e-06,7.19e-05,1
+mean burden,dose 46 amount,-1.799771e-05,-1.799820e-05,2.70e-05,1
+mean log burden,dose 46 amount,-3.541196e-04,-3.541255e-04,1.67e-05,1
+log burden at the end,dose 46 amount,-2.000388e-03,-2.000401e-03,6.90e-06,1
+resistance at the end,dose 46 amount,4.909983e-05,4.910116e-05,2.70e-05,1
+mean burden,dose 48 time,3.709203e-05,3.709535e-05,8.95e-05,1
+mean log burden,dose 48 time,6.688671e-04,6.689886e-04,1.82e-04,1
+log burden at the end,dose 48 time,-3.020164e-02,-3.019775e-02,1.29e-04,1
+resistance at the end,dose 48 time,1.100098e-04,1.099948e-04,1.36e-04,1
+mean burden,dose 48 amount,-5.796656e-06,-5.796904e-06,4.29e-05,1
+mean log burden,dose 48 amount,-1.321394e-04,-1.321428e-04,2.57e-05,1
+log burden at the end,dose 48 amount,-1.146420e-02,-1.146440e-02,1.71e-05,1
+resistance at the end,dose 48 amount,6.346498e-05,6.346638e-05,2.21e-05,1
+# tenqsp 0.9.1

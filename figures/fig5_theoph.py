@@ -66,22 +66,28 @@ observable conc = centr*ke/CL
 """)
 
 
-def one(n, dispersion=False):
+def problem(n, dispersion=False, *, starts=4, seed=1, ka=1.5, mtt=0.3):
+    """The fit of the theophylline data with a chain of n (0: first-order absorption)."""
     p = tf.Problem(model(n, dispersion), name=f"theoph_{'disp' if dispersion else ''}{n}")
     p.data(pd.read_csv(ROOT / "data" / "theoph.csv"), ID="Subject", TIME="Time", DV="conc")
     p.unit("ID")
     p.observe("conc", "DV")
     p.define("D", "Dose")  # mg/kg, a column of the data
-    p.estimate("ka", tf.lognormal(median=1.5, sdlog=0.5))
+    p.estimate("ka", tf.lognormal(median=ka, sdlog=0.5))
     p.estimate("CL", tf.lognormal(median=0.04, sdlog=0.5))
     p.estimate("ke", 0.08)
     if n:
-        p.estimate("MTT", 0.3, bounds=(1e-3, 5))
+        p.estimate("MTT", mtt, bounds=(1e-3, 5))
     if dispersion:
         p.estimate("disp", 0.15, bounds=(1e-3, 2))  # transit-time CV sqrt(2 disp), for small disp
     p.error("conc", tf.additive(1))
     p.method("laplace")
-    p.options(starts=4, seed=1, progress="none")
+    p.options(starts=starts, seed=seed, progress="none")
+    return p
+
+
+def one(n, dispersion=False):
+    p = problem(n, dispersion)
     t0 = time.perf_counter()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")

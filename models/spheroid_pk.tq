@@ -4,7 +4,7 @@ model spheroid_pk
 # hold the surface, a saturable (Emax) cytotoxic kill with 1/EC50 = isat (0: the paper's
 # linear kill), and a separate relaxation time epsd for the drugs, which sets how fast they
 # penetrate. Dimensionless.
-axis r in [0, 1] n=40 geometry=spherical    # distance from the centre
+axis r in [0, 1] n=40 geometry=spherical    # distance from the center
 axis x in [0, 1] n=100                          # resistance level (1: the most resistant)
 
 param mu2=10, sig_s=0.2, sig_c=0.2, g_s=1, g_c=1  # eq 2.12

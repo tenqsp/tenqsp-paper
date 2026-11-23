@@ -19,7 +19,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "figures"))
-import spheroid as sp  # noqa: E402
+import spheroid as sp
 
 GRIDS = ((20, 50), (40, 100), (80, 100), (40, 200), (80, 200))
 FINE = (80, 200)

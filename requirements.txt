@@ -1,5 +1,7 @@
-# Until the paper's cited releases exist, TenQSP and tenqsp-fit come from their main
-# branches; at submission these become exact versions (tenqsp==X.Y.Z, tenqsp-fit==X.Y.Z).
-tenqsp @ git+https://github.com/tenqsp/tenqsp@main
-tenqsp-fit @ git+https://github.com/tenqsp/tenqsp-fit@main
+# The versions the paper cites. requirements-lock.txt pins every package of the environment the
+# paper's results were made with (Python 3.12.15, Linux; CPU JAX; for the GPU rows of Table S3,
+# install jax[cuda12] of the same version).
+tenqsp==0.9.1
+tenqsp-fit==0.3.0
 matplotlib>=3.8
+pandas>=2.0

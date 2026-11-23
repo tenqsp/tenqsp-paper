@@ -9,12 +9,12 @@ Run fig7_runs.py and fig7_gradients.py first (or use the results in the reposito
 A  tumor burden under three schedules with the same average plasma level (solid: EC50 = 4;
    dotted: linear kill)
 B  mean resistance level
-C  the trade-off: burden against resistance at the end, for each kill and schedule; open
-   symbols: the same model without the depth axis
+C  mean density against resistance at the end, for each kill and schedule; open symbols: the
+   same model without the depth axis (with depth, the burden is divided by the volume 4*pi/3)
 D  the cells over depth and resistance at the end (a bolus every 21, EC50 = 4)
 E  resistance by depth at the end: fast (epsd = 0.1) and slow (epsd = 5) penetration
 F  which doses matter: change of the mean burden over the course for a dose given 1 time
-   unit later, or 1 % larger (exact derivatives, one run); inset: the burden at the end
+   unit later, or 1% larger (reverse-mode derivatives, one run); inset: the burden at the end
    for a dose 1 time unit later (only the last few doses count)
 """
 
@@ -25,6 +25,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+
+SPHERE = 4 * np.pi / 3  # with depth, the burden is the amount in the unit sphere; without, a density
 import printstyle as ps
 import spheroid as sp
 
@@ -52,22 +54,22 @@ def main(mode):
         ax[0].semilogy(z["t"], z["total"], c=c, ls=":", lw=0.8)
         ax[1].plot(a["t"], a["mean_x"], c=c, label=label)
         ax[1].plot(z["t"], z["mean_x"], c=c, ls=":", lw=0.8)
-    ax[0].set(xlabel="Time", ylabel="Tumor burden", title="A  Burden")
-    ax[1].set(xlabel="Time", ylabel="Mean resistance level", title="B  Resistance")
+    ax[0].set(xlabel="Time (dimensionless)", ylabel="Tumor burden", title="A  Burden")
+    ax[1].set(xlabel="Time (dimensionless)", ylabel="Mean resistance level", title="B  Resistance")
     ax[0].plot([], [], c="0.4", ls=":", lw=0.8, label="linear kill")
     ax[0].legend(loc="center right", bbox_to_anchor=(1.0, 0.45), handlelength=1.6)
 
     for isat, label, c in (("0", "linear kill", "k"), ("0.25", "EC50 4", "C2"), ("1", "EC50 1", "C4")):
         for s in sp.SCHEDULES:
             a = load(f"spheroid_pk_{isat}_{s}_1")
-            ax[2].scatter(a["mean_x"][-1], a["total"][-1], marker=MARKERS[s], c=c, s=14,
+            ax[2].scatter(a["mean_x"][-1], a["total"][-1] / SPHERE, marker=MARKERS[s], c=c, s=14,
                           label=label if s == "inf" else None)
     for s in sp.SCHEDULES:
         a = load(f"spheroid_nodepth_0.25_{s}")
         ax[2].scatter(a["mean_x"][-1], a["total"][-1], marker=MARKERS[s], facecolors="none", s=14,
                       edgecolors="C2", label="EC50 4, no depth" if s == "inf" else None)
-    ax[2].set(yscale="log", xlabel="Resistance at the end", ylabel="Burden at the end",
-              title="C  Trade-off")
+    ax[2].set(yscale="log", xlabel="Resistance at the end", ylabel="Mean density at the end",
+              title="C  At the end")
     ax[2].text(0.03, 0.03, "o infusion, □ every 7, △ every 21", transform=ax[2].transAxes, va="bottom",
                fontsize=ps.SIZE - 1)
     ax[2].legend(loc="center left")
@@ -96,8 +98,8 @@ def main(mode):
         later = 100 * J[0, :k] / y[0]  # % change of the mean burden, dose 1 time unit later
         larger = J[0, k:] * x0[k:] / y[0]  # % change for a dose 1 % larger
         number = np.arange(1, k + 1)
-        ax[5].bar(number - 0.2, larger, width=0.4, color="C0", label="dose 1 % larger")
-        ax[5].bar(number + 0.2, later, width=0.4, color="C3", label="dose 1 time unit later")
+        ax[5].bar(number - 0.2, larger, width=0.4, color="C0", label="each dose 1% larger")
+        ax[5].bar(number + 0.2, later, width=0.4, color="C3", label="each dose 1 time unit later")
         ax[5].axhline(0, c="k", lw=0.5)
         ax[5].set(xlabel="Dose number (every 21)", ylabel="% change of the mean burden",
                   title="F  Which doses matter")

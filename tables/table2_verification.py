@@ -32,7 +32,7 @@ MODELS = {
     "09": "Persisters and dormancy, Fokker-Planck (Balaban et al. 2004; Nielsen et al. 2007)",
     "10": "Biofilm penetration (Stewart 1996)",
     "11": "Phage plaque fronts (Yin & McCaskill 1992; Fort & Mendez 2002)",
-    "12": "Tumour drug-tolerance continuum (Lorenzi et al. 2016; Chisholm et al. 2015)",
+    "12": "Tumor drug-tolerance continuum (Lorenzi et al. 2016; Chisholm et al. 2015)",
 }
 
 # (tutorial, key, what is checked, measure, the tutorial's bound); a key in "convergence" is a

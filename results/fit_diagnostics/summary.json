@@ -1,0 +1,53 @@
+{
+ "friberg": {
+  "m2ll": 296.63832877143204,
+  "status": "converged",
+  "doctor": "doctor: 3 notes",
+  "findings": [
+   "note determination: condition number of the curvature 634; no ridge, every quantity determined within a factor 10.",
+   "note optima: one start: other optima were not looked for.",
+   "note tolerance check: at rtol 1e-08 the -2LL changes by 0.00022 and the estimates by less than 0.001 SE; rtol 1e-06 is enough."
+  ],
+  "tenqsp": "0.9.1",
+  "tenqsp_fit": "0.3.0",
+  "vpc_failed": 0
+ },
+ "theophylline_chain3": {
+  "m2ll": 313.2650820518468,
+  "status": "converged",
+  "doctor": "doctor: 2 problems, 2 notes",
+  "findings": [
+   "problem standard errors: failed: the Hessian of -2LL is not positive definite at the estimates (some quantities are not determined by the data, or the fit has not converged).",
+   "problem not at a minimum: -2LL curves downward at the estimates along a direction of ka.median, ka.sdlog and MTT: the fit stopped at a saddle or before the minimum, not at a minimum.",
+   "note optima: all 12 starts reached the same fit.",
+   "note tolerance check: at rtol 1e-08 the -2LL changes by 2.1e-05 and the estimates: not computed (no standard errors); rtol 1e-06 is enough."
+  ],
+  "tenqsp": "0.9.1",
+  "tenqsp_fit": "0.3.0",
+  "vpc_failed": 0
+ },
+ "theophylline_chain2": {
+  "m2ll": 313.7437326423565,
+  "status": "converged",
+  "doctor": "doctor: 3 notes",
+  "findings": [
+   "note determination: condition number of the curvature 122; no ridge, every quantity determined within a factor 10.",
+   "note optima: all 4 starts reached the same fit.",
+   "note tolerance check: at rtol 1e-08 the -2LL changes by 3.7e-05 and the estimates by less than 0.001 SE; rtol 1e-06 is enough."
+  ],
+  "tenqsp": "0.9.1",
+  "tenqsp_fit": "0.3.0"
+ },
+ "theophylline_chain5": {
+  "m2ll": 313.7727975650961,
+  "status": "converged",
+  "doctor": "doctor: 3 notes",
+  "findings": [
+   "note determination: condition number of the curvature 109; no ridge, every quantity determined within a factor 10.",
+   "note optima: all 4 starts reached the same fit.",
+   "note tolerance check: at rtol 1e-08 the -2LL changes by 1.6e-05 and the estimates by less than 0.001 SE; rtol 1e-06 is enough."
+  ],
+  "tenqsp": "0.9.1",
+  "tenqsp_fit": "0.3.0"
+ }
+}
