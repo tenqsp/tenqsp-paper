@@ -8,15 +8,15 @@ TenQSP 0.9.1 with tenqsp-fit 0.3.0.
 
 | | NONMEM | Monolix | nlmixr2 / rxode2 | Stan / Torsten | FiPy | py-pde | DifferentialEquations.jl + MethodOfLines.jl | TenQSP + tenqsp-fit |
 |---|---|---|---|---|---|---|---|---|
-| Equations over an axis (age, maturation, depth, trait): PDEs | by hand: the user writes the method-of-lines ODEs; templates (DOPDE, DOEXPAND) help [1, 2] | by hand: the user writes the method-of-lines ODEs (no PDE construct documented) [5]; a research extension exists [8] | by hand (no PDE construct documented) [11] | by hand (no PDE construct documented) [16] | yes (finite volumes) [17] | yes (finite differences, method of lines) [19] | yes (symbolic PDEs, discretized automatically) [21] | yes (finite volumes, written as in a paper) |
-| Delays | DDE solvers; distributed delays and transit chains by `ddexpand` [2, 3] | `delay()`, constant delays (estimable); transit absorption [5] | `delay()`, transit and lag functions [12] | no DDE solver documented [16b] | not documented | not documented | DDE solvers [22] | as an axis (a chain of transit compartments, or transport with or without spread); dose lags; no DDE solver |
+| Equations over an axis (age, maturation, depth, trait): PDEs | by hand: the user writes the method-of-lines ODEs; templates (DOPDE, DOEXPAND) help [1, 2] | by hand: the user writes the method-of-lines ODEs (no PDE construct documented) [5]; a research extension exists [8] | by hand (no PDE construct documented) [11] | by hand (no PDE construct documented) [16] | yes (finite volumes) [18] | yes (finite differences, method of lines) [20] | yes (symbolic PDEs, discretized automatically) [21] | yes (finite volumes, written as in a paper) |
+| Delays | DDE solvers; distributed delays and transit chains by `ddexpand` [2, 3] | `delay()`, constant delays (estimable); transit absorption [5] | `delay()`, transit and lag functions [12] | no DDE solver documented [17] | not documented | not documented | DDE solvers [22] | as an axis (a chain of transit compartments, or transport with or without spread); dose lags; no DDE solver |
 | Pharmacometric dosing and data | yes (the reference data format) [2] | yes [5] | yes, NONMEM conventions [13] | yes, NONMEM-style events (Torsten) [14] | no | no | through callbacks [23] | boluses, infusions, regimens, lags, bioavailability; NONMEM-style data in tenqsp-fit, which refuses records it would read differently (steady-state doses, resets) |
 | Compartments and fields in one model | by hand [4] | by hand | by hand | by hand | not documented | not documented | partly (connectors join a discretized PDE to lumped parts) [24] | yes |
 | Conservation ledger | not documented | not documented | not documented | not documented | not documented | not documented | not documented | yes, for every model |
 | Exact derivatives of the solution | sensitivities to the random effects; finite differences for the fixed effects unless `FAST` (all MU-referenced) [2, 6, 7] | not documented [9, 10] | forward sensitivity equations; outer gradient by finite differences unless `fast=TRUE` [11, 15] | yes (automatic differentiation; forward and adjoint sensitivities) [16] | not documented | not documented | yes (forward, adjoint, automatic differentiation) [25] | yes (JAX: forward mode, or reverse by replay) |
 | Population estimation | yes (FO, FOCE, Laplace, SAEM, IMP, Bayes) [2] | yes (SAEM) [9] | yes (FOCEi, SAEM and others) [15, 26] | yes (full Bayes) [14, 27] | no | no | not in these packages (Pumas is proprietary) [28] | yes (FOCE-I; Bayes by NUTS); no SAEM or importance sampling |
 | Open source | no [29] | no (free academic license) [30] | yes, GPL-3 [31] | yes, BSD-3 [32] | yes, NIST terms [33] | yes, MIT [32] | yes, MIT [32] | yes, Apache-2.0 |
-| Batches on a GPU | not documented (MPI across subjects) [2] | not documented (threads, clusters) [34] | not documented (threads across subjects) [11] | partly (OpenCL for some functions; MPI group solvers) [35, 36] | partly (GPU linear solver) [18] | not documented [19] | yes [37] | yes (JAX; Table S3) |
+| Batches on a GPU | not documented (MPI across subjects) [2] | not documented (threads, clusters) [34] | not documented (threads across subjects) [11] | partly (OpenCL for some functions; MPI group solvers) [35, 36] | partly (GPU linear solver) [19] | not documented [20] | yes [37] | yes (JAX; Table S3) |
 
 **Not in the table** (no column: they do not target the same problem, or document too little
 of it). Pumas: proprietary; population estimation on DifferentialEquations.jl, documented for
@@ -75,10 +75,11 @@ simulators; no pharmacometric data or population estimation documented [42, 43].
 13. rxode2 vignette, "Event types"
 14. Torsten documentation (metrumresearchgroup.github.io/Torsten)
 15. nlmixr2est 7.2.1, `foceiControl` reference; Almquist, Leander, Jirstrand, J Pharmacokinet Pharmacodyn 2015;42:191-209, doi:10.1007/s10928-015-9409-1
-16. Stan User's Guide, "Ordinary differential equations" and "Adjoint ODE solver"; 16b. Stan forum, "Is it possible to solve delay differential equation?"
-17. FiPy documentation (pages.nist.gov/fipy)
-18. FiPy documentation, "Solvers"
-19. py-pde documentation, "Getting started"
+16. Stan User's Guide, "Ordinary differential equations" and "Adjoint ODE solver"
+17. Stan forum, "Is it possible to solve delay differential equation?"
+18. FiPy documentation (pages.nist.gov/fipy)
+19. FiPy documentation, "Solvers"
+20. py-pde documentation, "Getting started"
 21. MethodOfLines.jl documentation
 22. DifferentialEquations.jl documentation, "DDE problems"
 23. DifferentialEquations.jl documentation, callback library
