@@ -118,6 +118,7 @@ checks the field against them.
 | `python figures/fig7_spheroid.py` | draws the figure from `results/` | seconds |
 | `python checks/spheroid_gradients_vs_fd.py` | the exact derivatives against finite differences | about 8 min (quick grid) |
 | `python checks/spheroid_tolerance.py` | the results do not depend on the solver's absolute tolerance | under 1 min (quick grid) |
+| `python checks/spheroid_grids.py` | the results on five grids, 20 x 50 to 80 x 200 cells, against the finest | about 30 min on 9 cores |
 | `python checks/lorz2015_reproduction.py` | the published results the case study builds on | about 2 min |
 
 Times measured on a 64-core Linux workstation with nothing else running; a laptop is slower. The
