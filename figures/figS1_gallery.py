@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 4: the 12 reference models (TenQSP's tutorials), each as a schematic of its state
-and a small view of its solution. Drawn from results/fig4 (run fig4_runs.py first).
+"""Figure S1: the 12 reference models (TenQSP's tutorials), each as a schematic of its state
+and a small view of its solution. Drawn from results/figS1 (run figS1_runs.py first).
 
-    python figures/fig4_gallery.py         # writes out/fig4_gallery.png and .pdf
+    python figures/figS1_gallery.py         # writes out/figS1_gallery.png and .pdf
 
 The schematics are drawn from the models' descriptions, not by hand: a field is a block of
 cells, one direction per continuous axis (an arrow for a one-way axis such as an age,
@@ -29,7 +29,7 @@ from matplotlib.colors import LogNorm, Normalize
 from matplotlib.patches import Circle, FancyArrowPatch, Rectangle
 
 ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results" / "fig4"
+RESULTS = ROOT / "results" / "figS1"
 OUT = ROOT / "out"
 
 # tutorial -> (model, title, reference); VIEW: which run and which field and axis to show below
@@ -140,7 +140,7 @@ def draw_field(ax, ir, f, x0, y0, w, h):
         style = "-|>" if kind == "one_way" else "<|-|>"
         ax.add_patch(FancyArrowPatch(p, q, arrowstyle=style, mutation_scale=6, lw=0.8, color="0.25"))
         mid = ((p[0] + q[0]) / 2, (p[1] + q[1]) / 2)
-        if rot == 0:  # at the start, clear of the arrows between fields at the centre
+        if rot == 0:  # at the start, clear of the arrows between fields at the center
             ax.text(p[0] + 0.05, p[1] - 0.14, label, fontsize=5.5, ha="left", va="top")
         elif q[1] - p[1] < 0.8:  # a short block: the label beside it, horizontal
             ax.text(x0 + W + 0.1, mid[1], label, fontsize=5.5, ha="left", va="center")
@@ -208,15 +208,15 @@ def schematic(ax, ir):
             return (x0 if tx < cx else x0 + W, cy)
         return (cx, y0 if ty < cy else y0 + H)
 
-    def centre(name):
+    def center(name):
         if name in pos:
             return pos[name]
         x0, y0, W, H = boxes[name]
         return (x0 + W / 2, y0 + H / 2)
 
     for s, d in sorted(lk):
-        p, q = anchor(s, centre(d)), anchor(d, centre(s))
-        if s in boxes and d in boxes:  # between stacked fields: right of centre, clear of the axis labels
+        p, q = anchor(s, center(d)), anchor(d, center(s))
+        if s in boxes and d in boxes:  # between stacked fields: right of center, clear of the axis labels
             def below(name, y):  # an end at a block's bottom starts under its axis arrow
                 return y - 0.2 if abs(y - boxes[name][1]) < 1e-9 else y
             p = (boxes[s][0] + 0.85 * boxes[s][2], below(s, p[1]))
@@ -224,7 +224,7 @@ def schematic(ax, ir):
         ax.add_patch(FancyArrowPatch(p, q, arrowstyle="-|>", mutation_scale=7, lw=0.8, color=COMP_E,
                                      connectionstyle=f"arc3,rad={bend(s, d, lk)}"))
     for dose in ir["doses"]:
-        x, y = centre(dose["target"])
+        x, y = center(dose["target"])
         top_y = y + (r if dose["target"] in pos else boxes[dose["target"]][3] / 2)
         ax.plot([x], [top_y + 0.22], "v", ms=4, c="k")
 
@@ -244,7 +244,7 @@ def thumbnail(ax, ir, run, view):
         y = np.asarray(prof[label]["faces"])
     top = u.max()
     positive = u[u > top * 1e-4]
-    if top / np.median(positive) > 30:  # wide range: log colours, from 1e-4 of the largest value
+    if top / np.median(positive) > 30:  # wide range: log colors, from 1e-4 of the largest value
         norm, u = LogNorm(vmin=top * 1e-4, vmax=top), np.clip(u, top * 1e-4, None)
     else:
         norm, u = Normalize(0, top), np.clip(u, 0, None)
@@ -282,8 +282,8 @@ def main():
     ps.check(fig, panels)
     OUT.mkdir(exist_ok=True)
     for ext in ("png", "pdf"):
-        fig.savefig(OUT / f"fig4_gallery.{ext}")
-    print(f"wrote {OUT / 'fig4_gallery.png'} (TenQSP {version})")
+        fig.savefig(OUT / f"figS1_gallery.{ext}")
+    print(f"wrote {OUT / 'figS1_gallery.png'} (TenQSP {version})")
 
 
 if __name__ == "__main__":

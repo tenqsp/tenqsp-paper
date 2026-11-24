@@ -1,16 +1,16 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 4, the computations: runs TenQSP's 12 tutorials and stores, for every model a
+"""Figure S1, the computations: runs TenQSP's 12 tutorials and stores, for every model a
 tutorial solves, its description (the IR, as JSON) and, from two of its solutions, the amount of
 each field over each of its axes and time, into
-results/fig4/<NN>.json (about 5 min, one tutorial per process).
+results/figS1/<NN>.json (about 5 min, one tutorial per process).
 
-    python figures/fig4_runs.py                    # tutorials of the installed version
-    python figures/fig4_runs.py --tutorials DIR    # tutorials in a local folder
-    python figures/fig4_runs.py --only 01 05       # some of them
+    python figures/figS1_runs.py                    # tutorials of the installed version
+    python figures/figS1_runs.py --tutorials DIR    # tutorials in a local folder
+    python figures/figS1_runs.py --only 01 05       # some of them
 
 The tutorials come from the source distribution of the installed TenQSP version, as for
-Table 2. Every scipy solve a tutorial makes is recorded; for each model (by name) the first solution
+Table S2. Every scipy solve a tutorial makes is recorded; for each model (by name) the first solution
 and the first on its finest grid are kept, on at most 60 output times.
 """
 
@@ -29,7 +29,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results" / "fig4"
+RESULTS = ROOT / "results" / "figS1"
 sys.path.insert(0, str(ROOT / "tables"))
 KEEP_TIMES = 60
 
@@ -102,7 +102,7 @@ def record_one(path):
 
 
 def main():
-    from table2_runs import sdist_tutorials
+    from tableS2_runs import sdist_tutorials
 
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--tutorials", type=Path, help="folder with the tutorials (default: from PyPI)")

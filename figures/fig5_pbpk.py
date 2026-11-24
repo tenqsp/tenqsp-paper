@@ -1,10 +1,10 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 6: a whole-body PBPK model as one field over organs and spaces. Drawn from
-results/fig6 (run fig6_runs.py first), at the journal's full width (7 in), text at 6-7 pt; it
+"""Figure 5: a whole-body PBPK model as one field over organs and spaces. Drawn from
+results/fig5 (run fig5_runs.py first), at the journal's full width (7 in), text at 6-7 pt; it
 stops if any text leaves its panel.
 
-    python figures/fig6_pbpk.py      # writes out/fig6_pbpk.png and .pdf
+    python figures/fig5_pbpk.py      # writes out/fig5_pbpk.png and .pdf
 
 A  the model's structure, from models/pbpk_wholebody.tq: the field C(organ, space) as nine
    organs of three spaces each, the blood pools, the blood flows and the portal drainage
@@ -190,8 +190,8 @@ def main():
         raise SystemExit("panel E's labels overlap panel D")
     pb.ROOT.joinpath("out").mkdir(exist_ok=True)
     for ext in ("png", "pdf"):
-        fig.savefig(pb.ROOT / "out" / f"fig6_pbpk.{ext}", dpi=DPI)
-    print(f"wrote {pb.ROOT / 'out' / 'fig6_pbpk.png'}", file=sys.stderr)
+        fig.savefig(pb.ROOT / "out" / f"fig5_pbpk.{ext}", dpi=DPI)
+    print(f"wrote {pb.ROOT / 'out' / 'fig5_pbpk.png'}", file=sys.stderr)
 
 
 if __name__ == "__main__":

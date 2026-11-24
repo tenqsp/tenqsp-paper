@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Table 2 and Figure 3, the computations: runs TenQSP's 12 tutorials and writes the numbers
-their checks measure to results/table2/<NN>.json (about 5 min, one tutorial per process).
+"""Table S2 and Figure 4, the computations: runs TenQSP's 12 tutorials and writes the numbers
+their checks measure to results/tableS2/<NN>.json (about 5 min, one tutorial per process).
 
-    python tables/table2_runs.py                       # tutorials of the installed version
-    python tables/table2_runs.py --tutorials DIR       # tutorials in a local folder
-    python tables/table2_runs.py --only 01 05          # some of them
+    python tables/tableS2_runs.py                       # tutorials of the installed version
+    python tables/tableS2_runs.py --tutorials DIR       # tutorials in a local folder
+    python tables/tableS2_runs.py --only 01 05          # some of them
 
 Without --tutorials, the source distribution of the installed TenQSP version is downloaded
 from PyPI (it contains docs/tutorials) into a cache folder. Each tutorial is run as a script
@@ -33,7 +33,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results" / "table2"
+RESULTS = ROOT / "results" / "tableS2"
 
 
 def amax(x):

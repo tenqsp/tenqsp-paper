@@ -18,28 +18,29 @@ model files (the `.tq` text of every case study) are here too.
 | `results/` | stored simulation results, so figures redraw in seconds |
 | `out/` | generated figures and tables (not tracked) |
 
-## Script names and the paper's numbering
+## Where each figure and table comes from
 
-The scripts keep the names they had in early drafts; they will be renamed to the paper's
-numbering in the archived version. Until then:
+Scripts and result folders carry the paper's numbers (`fig3_*` for Figure 3, `tableS2_*` for
+Table S2, and so on); shared set-up lives in `figures/eclipse.py`, `figures/transit_fit.py`,
+`figures/pbpk.py` and `figures/spheroid.py`.
 
 | In the paper | Scripts | Results |
 |---|---|---|
-| Figure 1 | `figures/fig1_concept.py` | (reads `results/fig5`) |
+| Figure 1 | `figures/fig1_concept.py` | (reads `results/fig3`) |
 | Figure 2 | `figures/fig2_runs.py`, `figures/fig2_transit.py`, `checks/implied_r0.py` | `results/fig2` |
-| Figure 3, Table S1, Figures S2–S3 | `figures/fig5_*.py`, `figures/transit_fit.py`, `checks/transit_dispersion_fits.py`, `checks/fit_diagnostics.py`, `checks/nonmem/` | `results/fig5`, `results/fit_diagnostics`, `results/nonmem` |
-| Figure 4, Table S2 | `figures/fig3_verification.py`, `tables/table2_*.py` | `results/table2` |
-| Figure 5 | `figures/fig6_runs.py`, `figures/fig6_pbpk.py` | `results/fig6` |
-| Figure 6 | `figures/fig7_*.py`, `figures/spheroid.py`, `checks/spheroid_*.py` | `results/fig7_full`, `results/spheroid_*` |
-| Figure S1 | `figures/fig4_runs.py`, `figures/fig4_gallery.py` | `results/fig4` |
-| Table S3, Figure S4 | `tables/table3_*.py`, `checks/spheroid_members.py` | `results/table3` |
+| Figure 3, Table S1, Figures S2–S3 | `figures/fig3_*.py`, `figures/transit_fit.py`, `checks/transit_dispersion_fits.py`, `checks/fit_diagnostics.py`, `checks/nonmem/` | `results/fig3`, `results/fit_diagnostics`, `results/nonmem` |
+| Figure 4, Table S2 | `figures/fig4_verification.py`, `tables/tableS2_*.py` | `results/tableS2` |
+| Figure 5 | `figures/fig5_runs.py`, `figures/fig5_pbpk.py` | `results/fig5` |
+| Figure 6 | `figures/fig6_*.py`, `figures/spheroid.py`, `checks/spheroid_*.py` | `results/fig6_full`, `results/spheroid_*` |
+| Figure S1 | `figures/figS1_runs.py`, `figures/figS1_gallery.py` | `results/figS1` |
+| Table S3, Figure S4 | `tables/tableS3_*.py`, `checks/spheroid_members.py` | `results/tableS3` |
 | Table 1 | `tables/table1_comparison.md`, `tables/table1_render.py` | |
 
 ## Reproducing
 
 ```bash
 python -m pip install -r requirements.txt       # or requirements-lock.txt for the exact environment
-python figures/fig7_spheroid.py                 # redraws Figure 6 from results/ (seconds)
+python figures/fig6_spheroid.py                 # redraws Figure 6 from results/ (seconds)
 ```
 
 To recompute the results, run the figure's run scripts first. The spheroid scripts have a
@@ -82,12 +83,12 @@ with the eclipse phase on an axis; one cell is the published model).
 
 | Command | What it does | Time |
 |---|---|---|
-| `python figures/fig5_runs.py` | panels A-C: 20 simulated studies, each fitted with chains of 3 to 60 transit compartments | about 10 min on 16 processes |
+| `python figures/fig3_runs.py` | panels A-C: 20 simulated studies, each fitted with chains of 3 to 60 transit compartments | about 10 min on 16 processes |
 | `python checks/transit_dispersion_fits.py` | the same 20 studies fitted with the true structure (transport with dispersion), the reference for panels A-C | about 10 min on 20 processes |
-| `python figures/fig5_theoph.py` | panel D: the theophylline data fitted with first-order absorption and chains of 1 to 20 | about 3 min (one process per fit) |
-| `python figures/fig5_theoph.py --dispersion` | panel D: the same data fitted with transport with an estimated dispersion, on 20 and 40 cells | about 35 min |
-| `python figures/fig5_friberg.py` | panels E-F: Friberg's myelosuppression model fitted to a simulated dose-ranging study | about 1 min |
-| `python figures/fig5_estimation.py` | draws the figure from `results/` | seconds |
+| `python figures/fig3_theoph.py` | panel D: the theophylline data fitted with first-order absorption and chains of 1 to 20 | about 3 min (one process per fit) |
+| `python figures/fig3_theoph.py --dispersion` | panel D: the same data fitted with transport with an estimated dispersion, on 20 and 40 cells | about 35 min |
+| `python figures/fig3_friberg.py` | panels E-F: Friberg's myelosuppression model fitted to a simulated dose-ranging study | about 1 min |
+| `python figures/fig3_estimation.py` | draws the figure from `results/` | seconds |
 | `python checks/fit_diagnostics.py` | Figures S2–S3: goodness of fit, VPC, RSE % and shrinkage for the theophylline chain of 3 (and the chains of 2 and 5) and the Friberg fit | about 10 min |
 | `python checks/nonmem/friberg_nonmem.py` | the Friberg fit against NONMEM's on the same data, from the same starts (Table S1); `... data` writes the data file for `checks/nonmem/friberg.ctl`, whose NONMEM estimates are stored in `results/nonmem/friberg.ext` | seconds (NONMEM: needs a license) |
 
@@ -99,9 +100,9 @@ chain written as an axis).
 
 | Command | What it does | Time |
 |---|---|---|
-| `python tables/table2_runs.py` | runs TenQSP's 12 tutorials (one process each) and stores the numbers their checks measure | about 5 min |
-| `python tables/table2_verification.py` | writes Table S2 from `results/` (`out/table2.md`, `out/table2.csv`) | seconds |
-| `python figures/fig3_verification.py` | draws the figure from `results/` | seconds |
+| `python tables/tableS2_runs.py` | runs TenQSP's 12 tutorials (one process each) and stores the numbers their checks measure | about 5 min |
+| `python tables/tableS2_verification.py` | writes Table S2 from `results/` (`out/tableS2.md`, `out/tableS2.csv`) | seconds |
+| `python figures/fig4_verification.py` | draws the figure from `results/` | seconds |
 
 The 12 reference models are TenQSP's tutorials; each checks itself against a published model,
 a closed form or a conservation ledger. By default the run script takes them from the source
@@ -111,8 +112,8 @@ distribution of the installed TenQSP version on PyPI; `--tutorials DIR` uses a l
 
 | Command | What it does | Time |
 |---|---|---|
-| `python figures/fig6_runs.py` | the computations of panels B-E and the exact checks | about 1 min |
-| `python figures/fig6_pbpk.py` | draws panels B-E from `results/` (panel A, the structure diagram, is drawn by hand) | seconds |
+| `python figures/fig5_runs.py` | the computations of panels B-E and the exact checks | about 1 min |
+| `python figures/fig5_pbpk.py` | draws panels B-E from `results/` (panel A, the structure diagram, is drawn by hand) | seconds |
 
 Model: `models/pbpk_wholebody.tq` (9 organs x 3 spaces, arterial and venous blood; the
 model of TenQSP's tutorial 6). The run script also writes the model as 29 ODEs by hand and
@@ -122,9 +123,9 @@ checks the field against them.
 
 | Command | What it does | Time (paper's grid / `--quick`) |
 |---|---|---|
-| `python figures/fig7_runs.py` | the simulations of panels A–E | about 3 min / 40 s on 8 cores |
-| `python figures/fig7_gradients.py` | panel F: reverse-mode derivatives with respect to the time and amount of all 48 doses, from one run and one pass back per objective | about 25 min and 80 GB of memory / 6 min and 20 GB |
-| `python figures/fig7_spheroid.py` | draws the figure from `results/` | seconds |
+| `python figures/fig6_runs.py` | the simulations of panels A–E | about 3 min / 40 s on 8 cores |
+| `python figures/fig6_gradients.py` | panel F: reverse-mode derivatives with respect to the time and amount of all 48 doses, from one run and one pass back per objective | about 25 min and 80 GB of memory / 6 min and 20 GB |
+| `python figures/fig6_spheroid.py` | draws the figure from `results/` | seconds |
 | `python checks/spheroid_gradients_vs_fd.py` | the reverse-mode derivatives against finite differences | about 15 min (quick grid) |
 | `python checks/spheroid_tolerance.py` | the results against the solver's tolerances | a few minutes (quick grid) |
 | `python checks/spheroid_grids.py` | the results on five grids, 20 x 50 to 80 x 200 cells | about 30 min on 9 cores |
@@ -139,15 +140,22 @@ Models: `models/spheroid_lorz2015.tq` (the published model), `models/spheroid_pk
 plasma pharmacokinetics, a saturable kill and the drug's penetration speed) and
 `models/spheroid_nodepth.tq` (the same without the depth axis).
 
+### Figure S1: the reference models
+
+| Command | What it does | Time |
+|---|---|---|
+| `python figures/figS1_runs.py` | runs TenQSP's 12 tutorials (one process each) and stores a small view of each model's solution | about 5 min |
+| `python figures/figS1_gallery.py` | draws the gallery from `results/` | seconds |
+
 ### Table S3 and Figure S4: what a run costs
 
 | Command | What it does | Time |
 |---|---|---|
-| `python tables/table3_runs.py` | one solve on each backend and one gradient, for 10 models from 3 to 16,242 states | about 1.5 h (the largest spheroid grid takes 1 h) |
-| `python tables/table3_batches.py` | virtual populations on the CPU: one call per member, one batch on 1 core, one batch over 64 threads | about 2 h (the spheroid batches take most of it) |
-| `python tables/table3_batches.py gpu` | the same batches on a GPU (an environment with CUDA JAX) | about 10 min |
+| `python tables/tableS3_runs.py` | one solve on each backend and one gradient, for 10 models from 3 to 16,242 states | about 1.5 h (the largest spheroid grid takes 1 h) |
+| `python tables/tableS3_batches.py` | virtual populations on the CPU: one call per member, one batch on 1 core, one batch over 64 threads | about 2 h (the spheroid batches take most of it) |
+| `python tables/tableS3_batches.py gpu` | the same batches on a GPU (an environment with CUDA JAX) | about 10 min |
 | `python checks/spheroid_members.py` | the spheroid members one at a time: which fail, and whether scipy solves them | about 15 min |
-| `python tables/table3_performance.py` | Table S3 (`out/table3.md`, `.csv`), the batch table (`out/table3_batches.md`) and Figure S4 (`out/figS_perf.png`, `.pdf`) from `results/table3` | seconds |
+| `python tables/tableS3_performance.py` | Table S3 (`out/tableS3.md`, `.csv`), the batch table (`out/tableS3_batches.md`) and Figure S4 (`out/figS4_performance.png`, `.pdf`) from `results/tableS3` | seconds |
 
 The times are wall-clock seconds, so run on an otherwise idle machine; each result records the
 versions and the machine's load when it started. The paper's numbers: TenQSP 0.9.1 and JAX

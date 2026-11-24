@@ -1,4 +1,4 @@
-$PROBLEM Friberg myelosuppression: the data and starts of figures/fig5_friberg.py
+$PROBLEM Friberg myelosuppression: the data and starts of figures/fig3_friberg.py
 ; Data: python checks/nonmem/friberg_nonmem.py data (writes friberg_nm.csv here).
 ; Model: models/friberg_maturation.tq with its three maturation cells written out as
 ; compartments T1-T3 (KTR = 4/MTT); drug in AC with CL = 1, V = 50 as in the TenQSP model.

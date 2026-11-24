@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 """Positive control for Figure 3 A-C: the 20 simulated studies fitted with the true structure.
 
-The studies of figures/fig5_runs.py are simulated from transport with dispersion (`using sharp` on
+The studies of figures/fig3_runs.py are simulated from transport with dispersion (`using sharp` on
 200 cells). Here each is fitted with that same structure on fewer cells, estimating MTT, ka, CL, V
 and the dispersion, with the full checks of tenqsp-fit. The coverage of these intervals is the
-reference against which the chain fits are read. Writes results/fig5/dispersion_fits.csv.
+reference against which the chain fits are read. Writes results/fig3/dispersion_fits.csv.
 
     python checks/transit_dispersion_fits.py               # 20 studies on 40 cells
     python checks/transit_dispersion_fits.py --studies 1 --cells 20 40 80   # grid check

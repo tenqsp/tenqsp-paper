@@ -1,10 +1,10 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Table 2: the checks of TenQSP's 12 reference models (its tutorials), from
-results/table2/*.json; writes out/table2.md and out/table2.csv (seconds).
+"""Table S2: the checks of TenQSP's 12 reference models (its tutorials), from
+results/tableS2/*.json; writes out/tableS2.md and out/tableS2.csv (seconds).
 
-    python tables/table2_runs.py           # the computations, about 5 min
-    python tables/table2_verification.py
+    python tables/tableS2_runs.py           # the computations, about 5 min
+    python tables/tableS2_verification.py
 
 Each row is one check a tutorial makes against a known result. "Measured" is the number the
 tutorial's check measures, in the same measure (absolute or relative, as stated); "Bound" is
@@ -17,7 +17,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results" / "table2"
+RESULTS = ROOT / "results" / "tableS2"
 OUT = ROOT / "out"
 
 MODELS = {
@@ -206,8 +206,8 @@ def main():
     lines += ["", (f"TenQSP {', '.join(versions)}; {len(data)} tutorials, {seconds:.0f} s of "
               "run time in all (one process each). Observed order: slope of log(error) against "
               "log(cells) over all grids, and for each doubling in brackets.")]
-    (OUT / "table2.md").write_text("\n".join(lines) + "\n")
-    with open(OUT / "table2.csv", "w", newline="") as f:
+    (OUT / "tableS2.md").write_text("\n".join(lines) + "\n")
+    with open(OUT / "tableS2.csv", "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(head)
         w.writerows(rows)

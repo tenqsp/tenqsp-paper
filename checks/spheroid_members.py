@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 """The spheroid virtual population of Table S3, one member at a time (Supplement S9).
 
-Each of the 64 members of tables/table3_batches.py is solved alone with the JAX backend and the
+Each of the 64 members of tables/tableS3_batches.py is solved alone with the JAX backend and the
 same settings; the members that fail are solved again with the scipy backend (which retries a
-failing segment with Radau IIA). Writes results/table3/spheroid_members.csv: for each member
+failing segment with Radau IIA). Writes results/tableS3/spheroid_members.csv: for each member
 that failed alone, its kill rate k1 and whether scipy solved it, with the TenQSP version.
 
     python checks/spheroid_members.py      # about 15 min
@@ -20,7 +20,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tables"))
 sys.path.insert(0, str(ROOT / "figures"))
-import table3_batches as tb
+import tableS3_batches as tb
 import tenqsp as tq
 
 if __name__ == "__main__":
@@ -41,5 +41,5 @@ if __name__ == "__main__":
             r = np.asarray(ss(tq.Scenario(params=p, regimen=sc.regimen, times=sc.times))[outputs[0]])
             solved = int(np.isfinite(r).all())
         rows.append(f"{i},{X[i][k]:.4f},{int(i in bad)},{solved},{tq.__version__}")
-    (ROOT / "results" / "table3" / "spheroid_members.csv").write_text("\n".join(rows) + "\n")
+    (ROOT / "results" / "tableS3" / "spheroid_members.csv").write_text("\n".join(rows) + "\n")
     print(f"failed alone: {bad}; typical k1 {x0[k]:.2f}")

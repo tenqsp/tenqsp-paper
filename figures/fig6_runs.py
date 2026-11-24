@@ -1,75 +1,52 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 6, the computations: writes results/fig6/*.npz and the exact checks (about 1 min).
+"""Figure 6, the simulations: the spheroid under three schedules with the same average plasma
+level (infusion, a bolus every 7, every 21), with a linear kill and two saturable ones, at
+two more penetration speeds, and without the depth axis. Writes results/fig6_<mode>/.
 
-    python figures/fig6_runs.py
+    python figures/fig6_runs.py            # the paper's grid: about 3 min on 8 cores
+    python figures/fig6_runs.py --quick    # 20 x 50 cells: under 1 min
 """
 
-import json
+import argparse
+import time
+from concurrent.futures import ProcessPoolExecutor
 
 import numpy as np
-import pbpk as pb
-import tenqsp as tq
-from scipy.integrate import solve_ivp
+import spheroid as sp
 
-DOSE, RATE = 100.0, 10.0  # mg IV bolus; mg/h infusion
-PS_GRID = (3.0, 10.0, 30.0, 100.0, 300.0, 1000.0)
+ISAT = {"0": 0.0, "0.25": 0.25, "1": 1.0}  # 1/EC50: linear kill, EC50 = 4, EC50 = 1
 
 
-def main():
-    pb.RESULTS.mkdir(parents=True, exist_ok=True)
-    m = pb.model()
-    checks = {}
-    iv = tq.bolus("Cven", DOSE, times=[0])
-    CL_H = pb.hepatic_clearance()
+def runs():
+    """(model, isat, schedule, epsd) of every run in the figure."""
+    out = [("spheroid_pk", i, s, 1.0) for i in ISAT for s in sp.SCHEDULES]
+    out += [("spheroid_pk", "0.25", s, e) for s in ("7", "21") for e in (0.1, 5.0)]
+    out += [("spheroid_nodepth", i, s, None) for i in ("0", "0.25") for s in sp.SCHEDULES]
+    return out
 
-    # the same model as 29 hand-written ODEs
-    t = np.array([0.1, 1, 6, 24, 96.0])
-    sol = m.solve((0, 96), times=t, regimen=iv, **pb.TIGHT)
-    rhs, Vt = pb.by_hand()
-    y0 = np.zeros(29)
-    y0[28] = DOSE
-    ref = solve_ivp(rhs, (0, 96), y0, t_eval=t, method="Radau", rtol=1e-12, atol=1e-14).y
-    hand = ref[:27].T.reshape(-1, 9, 3) / Vt
-    checks["field = 29 hand-written ODEs"] = float(np.max(np.abs(np.asarray(sol["C"]) - hand) / (hand + 1e-6)))
 
-    # an IV dose: profiles, mass balance and AUC
-    times = np.concatenate([np.linspace(0, 2, 81)[1:], np.linspace(2, 600, 300)[1:]])
-    sol = m.solve((0, 600), times=times, regimen=iv, **pb.TIGHT)
-    eliminated = -sol.ledger.moved["C"]["hazard: fu * CLint / Kp[organ] / V"]
-    in_blood = pb.V_ART * np.asarray(sol["Cart"]) + pb.V_VEN * np.asarray(sol["Cven"])
-    total = np.asarray(sol["in_tissues"]) + in_blood + eliminated
-    checks["mass balance (mg, of 100)"] = float(np.max(np.abs(total - DOSE)) / DOSE)
-    checks["AUC = Dose / CL_H"] = abs(float(sol["AUC"][-1]) / (DOSE / CL_H) - 1)
-    np.savez_compressed(pb.RESULTS / "iv.npz", t=times, C=np.asarray(sol["C"]),
-                        Cart=np.asarray(sol["Cart"]), eliminated=eliminated)
-
-    # an infusion: steady state and tissue:plasma ratios
-    infusion = tq.infusion("Cven", rate=RATE, duration=1e4, start=0)
-    ss = m.solve((0, 800), times=[800.0], regimen=infusion, **pb.TIGHT)
-    C_end, c_art = np.asarray(ss["C"])[-1], float(ss["Cart"][-1])
-    checks["steady state Css = R / CL_H"] = abs(c_art / (RATE / CL_H) - 1)
-    kp_tissue = pb.FRAC[0] + pb.FRAC[1] + pb.FRAC[2] * pb.KP
-    ratio = (C_end @ pb.FRAC) / c_art
-    keep = [o for o, name in enumerate(pb.ORGANS) if name != "liver"]
-    checks["tissue:plasma = Kp_tissue"] = float(np.max(np.abs(ratio[keep] / kp_tissue[keep] - 1)))
-
-    # hepatic clearance against the membranes' permeability
-    simulated = []
-    for ps in PS_GRID:
-        s = m.solve((0, 5000), times=[5000.0], regimen=infusion, params={"PS1": ps, "PS2": ps}, **pb.TIGHT)
-        simulated.append(RATE / float(s["Cart"][-1]))
-        print(f"PS {ps:6.0f}: CL_H simulated {simulated[-1]:.6f}, series formula "
-              f"{pb.hepatic_clearance(ps, ps):.6f} L/h", flush=True)
-    formula = np.array([pb.hepatic_clearance(ps, ps) for ps in PS_GRID])
-    checks["CL_H = series formula, PS 3 to 1000"] = float(np.max(np.abs(np.array(simulated) / formula - 1)))
-    np.savez_compressed(pb.RESULTS / "clearance.npz", ps=np.array(PS_GRID), simulated=np.array(simulated),
-                        ratio=ratio, kp_tissue=kp_tissue)
-
-    for k, v in checks.items():
-        print(f"{k:40s} {v:.1e}")
-    (pb.RESULTS / "checks.json").write_text(json.dumps(checks, indent=1))
+def one(job):
+    name, isat, schedule, epsd, mode = job
+    m = sp.model(name, mode)
+    params = {"isat": ISAT[isat]} | ({} if epsd is None else {"epsd": epsd})
+    times = np.linspace(0, sp.T, 1001)
+    t0 = time.perf_counter()
+    sol = m.solve((0, sp.T), times=times, regimen=sp.regimen(schedule), params=params, **sp.SOLVER)
+    keep = {"t": times, "total": np.asarray(sol["total"]), "mean_x": np.asarray(sol["mean_x"])}
+    if name == "spheroid_pk":
+        keep["n"] = np.asarray(sol["n"])[::100]  # every 100 time units
+    tag = f"{name}_{isat}_{schedule}" + ("" if epsd is None else f"_{epsd:g}")
+    np.savez_compressed(sp.results_dir(mode) / f"{tag}.npz", **keep)
+    return f"{tag}: {time.perf_counter() - t0:.0f} s, burden at t = {sp.T:g}: {keep['total'][-1]:.3g}"
 
 
 if __name__ == "__main__":
-    main()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--quick", action="store_true", help="20 x 50 cells instead of 40 x 100")
+    ap.add_argument("--jobs", type=int, default=8)
+    a = ap.parse_args()
+    mode = "quick" if a.quick else "full"
+    with ProcessPoolExecutor(a.jobs) as ex:
+        for line in ex.map(one, [r + (mode,) for r in runs()]):
+            print(line, flush=True)

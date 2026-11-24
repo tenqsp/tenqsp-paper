@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Shared set-up of Figure 6 (whole-body PBPK): the model, its values, the same model written
+"""Shared set-up of Figure 5 (whole-body PBPK): the model, its values, the same model written
 as 29 ODEs by hand, and the closed forms it is checked against."""
 
 from pathlib import Path
@@ -9,7 +9,7 @@ import numpy as np
 import tenqsp as tq
 
 ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results" / "fig6"
+RESULTS = ROOT / "results" / "fig5"
 ORGANS = ["lung", "brain", "heart", "muscle", "adipose", "kidney", "gut", "spleen", "liver"]
 SPACES = ["vascular", "interstitial", "cellular"]
 VORG = np.array([1.2, 1.4, 0.33, 29, 15, 0.31, 1.2, 0.19, 1.8])

@@ -1,13 +1,13 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 5 E, the fit: a population fit of the Friberg myelosuppression model with
+"""Figure 3 E-F, the fit: a population fit of the Friberg myelosuppression model with
 maturation written as an axis (models/friberg_maturation.tq), to a simulated dose-ranging
 study (20 patients at 60, 90 or 120 mg, 8 counts each; circ0 and slope vary between patients,
 lognormal sdlog 0.3; 15 % error), by method laplace (FOCE-I), as in tenqsp-fit's tutorial 4.
-Writes results/fig5/friberg_estimates.csv, friberg_data.csv and friberg_time.json (the fit's
+Writes results/fig3/friberg_estimates.csv, friberg_data.csv and friberg_time.json (the fit's
 wall time; run on an idle machine for the paper's number) (a few minutes).
 
-    python figures/fig5_friberg.py
+    python figures/fig3_friberg.py
 """
 
 import json

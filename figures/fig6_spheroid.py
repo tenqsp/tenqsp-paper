@@ -1,10 +1,10 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 7: the tumor spheroid case study, drawn from the stored results (seconds), at print
+"""Figure 6: the tumor spheroid case study, drawn from the stored results (seconds), at print
 size (printstyle.py).
-Run fig7_runs.py and fig7_gradients.py first (or use the results in the repository).
+Run fig6_runs.py and fig6_gradients.py first (or use the results in the repository).
 
-    python figures/fig7_spheroid.py [--quick]     # writes out/fig7_spheroid.png and .pdf
+    python figures/fig6_spheroid.py [--quick]     # writes out/fig6_spheroid.png and .pdf
 
 A  tumor burden under three schedules with the same average plasma level (solid: EC50 = 4;
    dotted: linear kill)
@@ -112,7 +112,7 @@ def main(mode):
         ins.set_xlabel("dose number", fontsize=ps.SIZE - 1.5, labelpad=1)
         ins.set_ylabel("% change", fontsize=ps.SIZE - 1.5, labelpad=1)
     else:
-        ax[5].text(0.5, 0.5, "run fig7_gradients.py", ha="center")
+        ax[5].text(0.5, 0.5, "run fig6_gradients.py", ha="center")
         ax[5].set_axis_off()
 
     fig.tight_layout(w_pad=1.0, h_pad=1.0)
@@ -120,7 +120,7 @@ def main(mode):
     out = sp.ROOT / "out"
     out.mkdir(exist_ok=True)
     for ext in ("png", "pdf"):
-        fig.savefig(out / f"fig7_spheroid{'_quick' if mode == 'quick' else ''}.{ext}")
+        fig.savefig(out / f"fig6_spheroid{'_quick' if mode == 'quick' else ''}.{ext}")
     print("written to", out)
 
 

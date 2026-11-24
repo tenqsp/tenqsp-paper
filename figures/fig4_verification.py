@@ -1,10 +1,10 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 3: verification on TenQSP's 12 reference models (its tutorials), drawn from
-results/table2/*.json into out/fig3_verification.png and .pdf (seconds).
+"""Figure 4: verification on TenQSP's 12 reference models (its tutorials), drawn from
+results/tableS2/*.json into out/fig4_verification.png and .pdf (seconds).
 
-    python tables/table2_runs.py           # the computations, about 5 min
-    python figures/fig3_verification.py
+    python tables/tableS2_runs.py           # the computations, about 5 min
+    python figures/fig4_verification.py
 
 (A) error against the number of cells for the tutorials with a grid-convergence study,
 with reference slopes 1 and 2; (B) the largest unexplained part of each conservation ledger
@@ -21,7 +21,7 @@ import numpy as np
 import printstyle as ps
 
 ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results" / "table2"
+RESULTS = ROOT / "results" / "tableS2"
 OUT = ROOT / "out"
 EPS = np.finfo(float).eps
 COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"]
@@ -133,8 +133,8 @@ def main():
     c.set_title("C  Models that must be identical")
     ps.check(fig, [a, b, c] + fig.legends)
     for ext in ("png", "pdf"):
-        fig.savefig(OUT / f"fig3_verification.{ext}")
-    print(f"wrote {OUT / 'fig3_verification.png'}")
+        fig.savefig(OUT / f"fig4_verification.{ext}")
+    print(f"wrote {OUT / 'fig4_verification.png'}")
 
 
 if __name__ == "__main__":

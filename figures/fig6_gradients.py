@@ -1,15 +1,15 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 7F, which doses matter: exact derivatives of the tumour burden with respect to the
+"""Figure 6F, which doses matter: exact derivatives of the tumor burden with respect to the
 time and the amount of each of the 48 boluses (one every 21, EC50 = 4), from one run with
 reverse derivatives (one backward pass per objective). Objectives: the mean burden over the course (the area under the
 burden curve divided by its length), the mean log burden, and the burden and the mean
 resistance level at the end. The areas are integrated by the solver as two extra states:
 a sum over output times would move with each dose time (the burden curve has a kink at
-every bolus) and give derivatives that reflect the sum, not the burden. Writes results/fig7_<mode>/gradients.npz.
+every bolus) and give derivatives that reflect the sum, not the burden. Writes results/fig6_<mode>/gradients.npz.
 
-    python figures/fig7_gradients.py            # the paper's grid: about 30 min, 80 GB
-    python figures/fig7_gradients.py --quick    # 20 x 50 cells: about 6 min, 20 GB
+    python figures/fig6_gradients.py            # the paper's grid: about 30 min, 80 GB
+    python figures/fig6_gradients.py --quick    # 20 x 50 cells: about 6 min, 20 GB
 
 checks/spheroid_gradients_vs_fd.py compares these derivatives with finite differences.
 """

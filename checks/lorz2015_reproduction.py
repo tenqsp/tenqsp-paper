@@ -3,7 +3,7 @@
 """Reproduce Lorz et al. 2015 (Bull Math Biol 77:1-22) with TenQSP, then run the true sphere.
 
 The published figures correspond to a flat (one-dimensional) Laplacian: run on a planar axis,
-the model gives the paper's nutrient and drug levels at the centre (its Figure 2) and the
+the model gives the paper's nutrient and drug levels at the center (its Figure 2) and the
 resistance level selected at each depth (its Figure 1). At each depth, the cells concentrate
 at a root of the net growth rate R(x) = 0 (the paper's eqs 3.3 and 3.4). The same is then
 run with geometry=spherical. About 2 min in all.
@@ -45,16 +45,16 @@ def check(what, ok):
 
 s, _, peak, root = run("planar", 0.0)
 print("planar, no drug: s(0) =", round(s[0], 4), " peaks at r = 0, 0.5, 1:", peak[[0, 20, -1]])
-check("s at the centre = paper's Figure 2 (about 0.063)", abs(s[0] - 0.063) < 0.003)
-check("peaks = paper's Figure 1 (about 0.43 at the centre, 0.22 at the surface)",
+check("s at the center = paper's Figure 2 (about 0.063)", abs(s[0] - 0.063) < 0.003)
+check("peaks = paper's Figure 1 (about 0.43 at the center, 0.22 at the surface)",
       abs(peak[0] - 0.43) < 0.02 and abs(peak[-1] - 0.22) < 0.02)
 check("peaks on the root of R = 0 (eq 3.3), within 0.01", np.max(np.abs(peak - root)) < 0.01)
 
 _, c1, peak, root = run("planar", 1.0)
 print("planar, cytotoxic drug: c1(0) =", round(c1[0], 4))
-check("c1 at the centre = paper's Figure 2 (about 0.21)", abs(c1[0] - 0.21) < 0.01)
+check("c1 at the center = paper's Figure 2 (about 0.21)", abs(c1[0] - 0.21) < 0.01)
 
 s_sph, _, peak_sph, root_sph = run("spherical", 0.0)
 print("sphere, no drug: s(0) =", round(s_sph[0], 4), " peaks:", peak_sph[[0, 20, -1]])
-check("in a sphere the centre gets more nutrient", s_sph[0] > 2 * s[0])
+check("in a sphere the center gets more nutrient", s_sph[0] > 2 * s[0])
 check("sphere: peaks on the root of R = 0, within 0.01", np.max(np.abs(peak_sph - root_sph)) < 0.01)

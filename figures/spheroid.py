@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Shared set-up of the spheroid case study (Figure 7): the models, the grids, the dosing
-schedules and the solver settings. Used by fig7_runs.py, fig7_gradients.py and fig7_spheroid.py.
+"""Shared set-up of the spheroid case study (Figure 6): the models, the grids, the dosing
+schedules and the solver settings. Used by fig6_runs.py, fig6_gradients.py and fig6_spheroid.py.
 
 Two modes: "full" (the paper's grid, 40 depth cells x 100 resistance levels) and "quick"
 (20 x 50; for trying the scripts: within 9 % of the full grid for a saturable kill, up to 24 % for
@@ -48,6 +48,6 @@ def regimen(schedule):
 
 
 def results_dir(mode):
-    d = RESULTS / f"fig7_{mode}"
+    d = RESULTS / f"fig6_{mode}"
     d.mkdir(parents=True, exist_ok=True)
     return d

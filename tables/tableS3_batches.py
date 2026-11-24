@@ -1,12 +1,12 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Table 3, virtual populations: many parameter sets of one model run in one call
+"""Table S3, virtual populations: many parameter sets of one model run in one call
 (jax.vmap of sim.function(..., derivatives=False)), against one call per set, on one CPU
-core, on 64 CPU cores (jax.shard_map) and on a GPU. Writes results/table3/batch_*.json.
+core, on 64 CPU cores (jax.shard_map) and on a GPU. Writes results/tableS3/batch_*.json.
 
-    python tables/table3_batches.py                 # every CPU case, one process each
-    python tables/table3_batches.py gpu             # every GPU case (an environment with CUDA JAX)
-    python tables/table3_batches.py friberg vmap    # one case
+    python tables/tableS3_batches.py                 # every CPU case, one process each
+    python tables/tableS3_batches.py gpu             # every GPU case (an environment with CUDA JAX)
+    python tables/tableS3_batches.py friberg vmap    # one case
 
 Every member draws its parameters from a log-normal distribution (SD 0.3 on the log scale)
 around the model's values. "loop": one compiled call per member (the mean over a few);
@@ -26,7 +26,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "results" / "table3"
+OUT = ROOT / "results" / "tableS3"
 sys.path.insert(0, str(ROOT / "figures"))
 CORES = 64
 
@@ -51,8 +51,8 @@ def spheroid():
     import spheroid as sp
     import tenqsp as tq
 
-    sp.GRIDS["table3"] = (10, 25)
-    m = sp.model("spheroid_pk", "table3")
+    sp.GRIDS["tableS3"] = (10, 25)
+    m = sp.model("spheroid_pk", "tableS3")
     sc = tq.Scenario(params={"isat": 0.25}, regimen=sp.regimen("21"), times=np.linspace(50, sp.T, 20))
     return m, sc, ["s1", "k1", "epsd", "isat"], ["total"], sp.SOLVER, 64, 4
 

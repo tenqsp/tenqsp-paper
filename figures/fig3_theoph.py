@@ -1,16 +1,16 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 5 D, the fits: theophylline in 12 subjects (R's Theoph data, data/theoph.csv),
+"""Figure 3 D, the fits: theophylline in 12 subjects (R's Theoph data, data/theoph.csv),
 population fits (method laplace, FOCE-I) with first-order absorption and with a transit
 chain of N compartments before it, N = 1 ... 20 with the mean transit time estimated. ka
-and CL vary between subjects as in tenqsp-fit's tutorial 1. Writes results/fig5/theoph.csv.
+and CL vary between subjects as in tenqsp-fit's tutorial 1. Writes results/fig3/theoph.csv.
 
 With --dispersion, the delay is instead transport with an estimated dispersion (`using sharp`),
 fitted on 20 and on 40 cells: the estimates should not depend on the grid. Writes
-results/fig5/theoph_dispersion.csv (each fit takes one to two hours).
+results/fig3/theoph_dispersion.csv (each fit takes one to two hours).
 
-    python figures/fig5_theoph.py
-    python figures/fig5_theoph.py --dispersion
+    python figures/fig3_theoph.py
+    python figures/fig3_theoph.py --dispersion
 """
 
 import multiprocessing

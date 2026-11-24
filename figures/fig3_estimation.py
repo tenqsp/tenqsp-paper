@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Figure 5: estimation with TenQSP models (tenqsp-fit). Drawn from results/fig5 (run
-fig5_runs.py, fig5_theoph.py and fig5_friberg.py first).
+"""Figure 3: estimation with TenQSP models (tenqsp-fit). Drawn from results/fig3 (run
+fig3_runs.py, fig3_theoph.py and fig3_friberg.py first).
 
-    python figures/fig5_estimation.py      # writes out/fig5_estimation.png and .pdf
+    python figures/fig3_estimation.py      # writes out/fig3_estimation.png and .pdf
 
 Drawn at print size (printstyle.py).
 
@@ -149,8 +149,8 @@ def main():
     ps.check(fig, ax)
     OUT.mkdir(exist_ok=True)
     for ext in ("png", "pdf"):
-        fig.savefig(OUT / f"fig5_estimation.{ext}")
-    print(f"wrote {OUT / 'fig5_estimation.png'} from {studies} studies", file=sys.stderr)
+        fig.savefig(OUT / f"fig3_estimation.{ext}")
+    print(f"wrote {OUT / 'fig3_estimation.png'} from {studies} studies", file=sys.stderr)
 
 
 if __name__ == "__main__":

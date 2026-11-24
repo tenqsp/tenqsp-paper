@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Table 3, what a run costs: the case-study models from 3 to about 17,000 states, solved by
+"""Table S3, what a run costs: the case-study models from 3 to about 17,000 states, solved by
 the scipy backend and by the JAX backend, and the gradient of a least-squares objective
-with respect to the model's parameters. Writes results/table3/<case>.json.
+with respect to the model's parameters. Writes results/tableS3/<case>.json.
 
-    python tables/table3_runs.py           # every case, one process each, one after another
-    python tables/table3_runs.py 3         # one case (index into CASES)
+    python tables/tableS3_runs.py           # every case, one process each, one after another
+    python tables/tableS3_runs.py 3         # one case (index into CASES)
 
 Per case: "build" turns the model into its program (once per model); "scipy" and "JAX" are
 one solve at the scenario; "f(x)" one call of the model as a JAX function of the parameters
@@ -29,7 +29,7 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-OUT = ROOT / "results" / "table3"
+OUT = ROOT / "results" / "tableS3"
 sys.path.insert(0, str(ROOT / "figures"))
 
 PK = """model pk
@@ -92,8 +92,8 @@ def spheroid(nr, nx):
     def build():
         import spheroid as sp
 
-        sp.GRIDS["table3"] = (nr, nx)
-        m = sp.model("spheroid_pk", "table3")
+        sp.GRIDS["tableS3"] = (nr, nx)
+        m = sp.model("spheroid_pk", "tableS3")
         return (m, sp.regimen("21"), np.linspace(50, sp.T, 20), ["s1", "k1", "epsd", "isat"], ["total", "mean_x"],
                 {**sp.SOLVER, "params": {"isat": 0.25}})
 

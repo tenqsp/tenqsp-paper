@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Check that the Figure 7 results do not depend on the solver's absolute tolerance.
+"""Check that the Figure 6 results do not depend on the solver's absolute tolerance.
 
 The relapse grows from cells that start very small (2e-23 at full resistance). Each run is
 repeated at atol 1e-15, 1e-20 and 1e-28 and at rtol 1e-8, and compared with the paper's setting

@@ -72,7 +72,7 @@ def one(job):
 
 def continuous(kill, schedule):
     key = {"linear kill": "0", "EC50 4": "0.25", "EC50 1": "1"}[kill]
-    a = np.load(sp.RESULTS / "fig7_full" / f"spheroid_pk_{key}_{schedule}_1.npz")
+    a = np.load(sp.RESULTS / "fig6_full" / f"spheroid_pk_{key}_{schedule}_1.npz")
     return float(a["total"].min()), float(a["total"][-1]), float(a["mean_x"][-1])
 
 

@@ -3,11 +3,11 @@
 """Check the dose derivatives of Figure 6F against central finite differences.
 
 Figure 6F's derivatives come from one reverse-mode (record and replay) computation in
-figures/fig7_gradients.py. The same function computes them here, on the quick grid (20 x 50 cells)
+figures/fig6_gradients.py. The same function computes them here, on the quick grid (20 x 50 cells)
 by default, and they are compared with central differences of the scipy backend at a tight
 tolerance, for the time (moved 0.5 earlier and later) and the amount (1 % smaller and larger) of
 five boluses (one every 21, EC50 = 4), for all four objectives. The areas are integrated by the
-solver, as in fig7_gradients.py. Writes results/fig7_<mode>/fd_check.csv.
+solver, as in fig6_gradients.py. Writes results/fig6_<mode>/fd_check.csv.
 
     python checks/spheroid_gradients_vs_fd.py           # quick grid: about 15 min, 20 GB
     python checks/spheroid_gradients_vs_fd.py --full    # the paper's grid
@@ -22,7 +22,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "figures"))
 import spheroid as sp
-from fig7_gradients import AREAS, OBJECTIVES, gradients
+from fig6_gradients import AREAS, OBJECTIVES, gradients
 
 DOSES = (1, 24, 44, 46, 48)  # the first, one in the middle and the last few
 H_TIME, H_AMOUNT = 0.5, 0.01  # the time step, and the relative step of the amount

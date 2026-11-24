@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Check how the Figure 7 results depend on the grid: depth x resistance cells.
+"""Check how the Figure 6 results depend on the grid: depth x resistance cells.
 
-The nine runs of Figure 7 with the depth axis (linear kill, EC50 = 4 and EC50 = 1, under the
+The nine runs of Figure 6 with the depth axis (linear kill, EC50 = 4 and EC50 = 1, under the
 three schedules) are repeated on 20 x 50, 40 x 100 (the paper's grid) and 80 x 200 cells, and
 on 80 x 100 and 40 x 200 to tell which axis matters. For each run: the deepest response (the
 smallest burden over the course), the burden at the end and the mean resistance at the end,

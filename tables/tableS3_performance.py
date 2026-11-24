@@ -1,14 +1,14 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Table 3 and Figure S-perf, from results/table3 (run table3_runs.py and table3_batches.py
+"""Table S3 and Figure S4, from results/tableS3 (run tableS3_runs.py and tableS3_batches.py
 first; the GPU rows need an environment with CUDA JAX).
 
-    python tables/table3_performance.py    # writes out/table3.md, out/table3.csv,
-                                           # out/table3_batches.md and out/figS_perf.png/.pdf
+    python tables/tableS3_performance.py    # writes out/tableS3.md, out/tableS3.csv,
+                                           # out/tableS3_batches.md and out/figS4_performance.png/.pdf
 
-Table 3: one run of each model on each backend, and the gradient of a least-squares
+Table S3: one run of each model on each backend, and the gradient of a least-squares
 objective. Batches: many parameter sets of one model, per member.
-Figure S-perf: (A) time of one solve and of one gradient against the number of states;
+Figure S4: (A) time of one solve and of one gradient against the number of states;
 (B) time per member of a virtual population, by how it is run.
 """
 
@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results" / "table3"
+RESULTS = ROOT / "results" / "tableS3"
 OUT = ROOT / "out"
 MODES = {"loop": "one call per member (1 core)", "vmap": "one batch (1 core)", "cores": "one batch (64 cores)",
          "gpu": "one batch (GPU)"}
@@ -95,18 +95,18 @@ def figure(df, b):
     ax[1].legend(frameon=False, loc="upper left")
     fig.tight_layout(w_pad=1.5)
     for ext in ("png", "pdf"):
-        fig.savefig(OUT / f"figS_perf.{ext}", dpi=300)
+        fig.savefig(OUT / f"figS4_performance.{ext}", dpi=300)
 
 
 def main():
     OUT.mkdir(exist_ok=True)
     df = runs()
-    (OUT / "table3.md").write_text(table(df) + "\n")
-    df.drop(columns=["versions"]).to_csv(OUT / "table3.csv", index=False)
+    (OUT / "tableS3.md").write_text(table(df) + "\n")
+    df.drop(columns=["versions"]).to_csv(OUT / "tableS3.csv", index=False)
     print(table(df))
     b = batches()
     if len(b):
-        (OUT / "table3_batches.md").write_text(batch_table(b) + "\n")
+        (OUT / "tableS3_batches.md").write_text(batch_table(b) + "\n")
         print()
         print(batch_table(b))
         figure(df, b)

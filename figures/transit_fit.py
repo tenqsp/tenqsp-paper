@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Yonsei University Health System
 # SPDX-License-Identifier: Apache-2.0
-"""Shared set-up of Figure 5 A-C: transit absorption with a delay of known dispersion, studies
+"""Shared set-up of Figure 3 A-C: transit absorption with a delay of known dispersion, studies
 simulated from it, and fits with fixed transit chains (tenqsp-fit).
 
 The truth: the drug in transit moves along an axis with dispersion (`using sharp` on 200
@@ -20,7 +20,7 @@ import tenqsp as tq
 import tenqsp_fit as tf
 
 ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results" / "fig5"
+RESULTS = ROOT / "results" / "fig3"
 TRUE = {"MTT": 1.5, "ka": 3.0, "CL": 3.0, "V": 30.0}
 DISP = 0.02  # transit-time CV sqrt(2 * 0.02) = 0.20
 TIMES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4, 8, 24]
