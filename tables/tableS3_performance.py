@@ -33,9 +33,18 @@ def seconds(s):
     return f"{s:.3f}" if s < 1 else f"{s:.2f}" if s < 10 else f"{s:.0f}"
 
 
+# The stored results carry the figure numbers of an early draft; the paper's numbers:
+FIGURE = {"-": "-", "2": "2", "5": "3", "6": "5", "7": "6"}
+FIGURE_BY_LABEL = {"Friberg myelosuppression, 3 maturation cells": "1, 3"}
+LABEL = {"tumour spheroid": "tumor spheroid"}  # American spelling in the table, stored labels unchanged
+
+
 def runs():
     rows = [json.loads(p.read_text()) for p in sorted(RESULTS.glob("case*.json"))]
     df = pd.DataFrame(rows).sort_values("states")
+    df["figure"] = [FIGURE_BY_LABEL.get(lab, FIGURE[f]) for lab, f in zip(df.label, df.figure, strict=True)]
+    for old, new in LABEL.items():
+        df["label"] = df.label.str.replace(old, new)
     df["grad_per_jax"] = df.grad_s / df.jax_s
     return df
 
