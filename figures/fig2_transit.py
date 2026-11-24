@@ -37,7 +37,7 @@ def main():
     tr = np.load(ec.RESULTS / "transit.npz")
     r = np.load(ec.RESULTS / "eclipse.npz")
     ps.setup()
-    fig, ax = plt.subplots(2, 3, figsize=(ps.WIDTH, 4.6))
+    fig, ax = plt.subplots(2, 3, figsize=(ps.WIDTH, 5.4))
     ax = ax.ravel()
 
     # A
@@ -48,9 +48,9 @@ def main():
         ax[0].plot(t[::8], tr[f"axis_{n}"][::8], "o", c=c, ms=3, mfc="none", label=f"axis, {n} cells")
         diffs.append(np.max(np.abs(tr[f"axis_{n}"] - tr[f"chain_{n}"])))
     ax[0].set(xlabel="Time (h)", ylabel="Concentration (mg/L)", title="A  Transit absorption")
-    ax[0].set_ylim(-0.3, 8.6)
-    ax[0].legend(loc="upper right", ncol=2, columnspacing=0.8, handlelength=1.4)
-    ax[0].text(0.95, 0.6, f"largest difference\n{max(diffs):.0e} mg/L", transform=ax[0].transAxes,
+    ax[0].set_ylim(-0.3, 11)
+    ax[0].legend(loc="upper right", handlelength=1.4)
+    ax[0].text(0.95, 0.47, f"largest difference\n{max(diffs):.0e} mg/L", transform=ax[0].transAxes,
                ha="right")
 
     # B
@@ -59,7 +59,8 @@ def main():
         ax[1].plot(h, gamma.pdf(h, n, scale=6.0 / n), c=COLORS[n], label=LABELS[n])
     ax[1].axvline(6.0, c="k", label="fixed delay")
     ax[1].set(xlabel="Eclipse duration (h)", ylabel="Density (1/h)", title="B  Eclipse, mean 6 h")
-    ax[1].legend()
+    ax[1].set_ylim(-0.02, 0.75)
+    ax[1].legend(loc="upper right", handlelength=1.4)
 
     # C
     ns = r["ns"]
@@ -73,9 +74,10 @@ def main():
     ax[2].plot([0.97], [r["sim_delay"]], "x", c="k", ms=5, transform=edge, clip_on=False)
     ax[2].set_xscale("log")
     ax[2].set_xlim(0.8, 80)
+    ax[2].set_ylim(5.9, 9.8)
     ax[2].set(xlabel="Eclipse compartments N", ylabel="Early growth rate (1/day)",
               title="C  Growth rate against N")
-    ax[2].legend()
+    ax[2].legend(loc="upper right", handlelength=1.4)
 
     # D
     x = r["t0s"] / ec.T_STAR
@@ -86,7 +88,7 @@ def main():
     ax[3].axhline(0, c="grey", lw=0.8)
     ax[3].axvline(1, c="grey", lw=0.8, ls=":")
     ax[3].set_xscale("log")
-    ax[3].set(xlabel="Target cells / threshold, T$_0$/T* (= R$_0$)", ylabel="Early growth rate (1/day)",
+    ax[3].set(xlabel="T$_0$/T* (= R$_0$)", ylabel="Early growth rate (1/day)",
               title="D  Same threshold, R$_0$ = 1")
     ax[3].legend()
 
@@ -96,7 +98,7 @@ def main():
         ax[5].plot(r["t"], r[f"T_{k}"] / ec.T0, c=COLORS[k], label=LABELS[k])
     ax[4].set(xlabel="Time (days)", ylabel="Virus (TCID$_{50}$/mL)", title="E  Viral load", ylim=(1e-2, 1e7))
     ax[5].set(xlabel="Time (days)", ylabel="Target cells / T$_0$", title="F  Target cells")
-    ax[4].legend()
+    # E and F share D's legend
 
     fig.tight_layout(w_pad=1.2, h_pad=1.0)
     ps.check(fig, ax)

@@ -44,7 +44,7 @@ def main(mode):
     r = (np.arange(nr) + 0.5) / nr
     x = (np.arange(nx) + 0.5) / nx
     ps.setup()
-    fig, ax = plt.subplots(2, 3, figsize=(ps.WIDTH, 4.7))
+    fig, ax = plt.subplots(3, 2, figsize=(ps.WIDTH, 8.2))  # two columns at 8 pt
     ax = ax.ravel()
 
     for s, label in sp.SCHEDULES.items():
@@ -71,7 +71,7 @@ def main(mode):
     ax[2].set(yscale="log", xlabel="Resistance at the end", ylabel="Mean density at the end",
               title="C  At the end")
     ax[2].text(0.03, 0.03, "o infusion, □ every 7, △ every 21", transform=ax[2].transAxes, va="bottom",
-               fontsize=ps.SIZE - 1)
+               fontsize=ps.SIZE)
     ax[2].legend(loc="center left")
 
     n = load("spheroid_pk_0.25_21_1")["n"][-1]
@@ -86,9 +86,9 @@ def main(mode):
             ax[4].plot(r, (n * x).sum(1) / n.sum(1), c=c, ls=ls, label=f"every {s}, {speed}")
     ax[4].set(xlabel="Distance from the center r", ylabel="Mean resistance level",
               title="E  Resistance by depth")
-    ax[4].set_ylim(top=0.885)
+    ax[4].set_ylim(top=0.9)
     ax[4].legend(ncol=2, loc="upper center", columnspacing=0.8, handlelength=1.6, title="schedule, penetration",
-                 title_fontsize=ps.SIZE - 1, fontsize=ps.SIZE - 1)
+                 title_fontsize=ps.SIZE, fontsize=ps.SIZE)
 
     g = d / "gradients.npz"
     if g.exists():
@@ -103,14 +103,14 @@ def main(mode):
         ax[5].axhline(0, c="k", lw=0.5)
         ax[5].set(xlabel="Dose number (every 21)", ylabel="% change of the mean burden",
                   title="F  Which doses matter")
-        ax[5].legend(loc="upper left", fontsize=ps.SIZE - 1)
+        ax[5].legend(loc="upper left", fontsize=ps.SIZE)
         # inset: the burden at the end forgets all but the last few dose times
-        ins = ax[5].inset_axes([0.42, 0.38, 0.52, 0.32])
+        ins = ax[5].inset_axes([0.2, 0.36, 0.5, 0.28])
         ins.bar(number, 100 * J[2, :k], width=0.6, color="C3")  # % per time unit later
-        ins.set_title("final burden, dose 1 later", fontsize=ps.SIZE - 1, loc="center", weight="normal")
-        ins.tick_params(labelsize=ps.SIZE - 1.5)
-        ins.set_xlabel("dose number", fontsize=ps.SIZE - 1.5, labelpad=1)
-        ins.set_ylabel("% change", fontsize=ps.SIZE - 1.5, labelpad=1)
+        ins.set_title("final burden, dose 1 later", fontsize=ps.SIZE, loc="center", weight="normal")
+        ins.tick_params(labelsize=ps.SIZE)
+        ins.set_xlabel("dose number", fontsize=ps.SIZE, labelpad=1)
+        ins.set_ylabel("% change", fontsize=ps.SIZE, labelpad=1)
     else:
         ax[5].text(0.5, 0.5, "run fig6_gradients.py", ha="center")
         ax[5].set_axis_off()

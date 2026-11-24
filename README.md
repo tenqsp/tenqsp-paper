@@ -34,7 +34,7 @@ Table S2, and so on); shared set-up lives in `figures/eclipse.py`, `figures/tran
 | Figure 6 | `figures/fig6_*.py`, `figures/spheroid.py`, `checks/spheroid_*.py` | `results/fig6_full`, `results/spheroid_*` |
 | Figure S1 | `figures/figS1_runs.py`, `figures/figS1_gallery.py` | `results/figS1` |
 | Table S3, Figure S4 | `tables/tableS3_*.py`, `checks/spheroid_members.py` | `results/tableS3` |
-| Table 1 | `tables/table1_comparison.md`, `tables/table1_render.py` | |
+| Table 1, Table S4 | `tables/table1_comparison.md`, `tables/tableS4_comparison.md`, `tables/table1_render.py` | |
 
 ## Reproducing
 
@@ -57,14 +57,15 @@ within 9 % of the paper's grid for a saturable kill, but up to 24 % for the line
 Model: `models/friberg_maturation.tq`.
 The figure is drawn at full page width (7 in), and the script stops if any text leaves its box.
 
-### Table 1: comparison with other tools
+### Table 1 and Table S4: comparison with other tools
 
-`tables/table1_comparison.md`, written by hand from each tool's documentation, with a source
-for every cell.
+`tables/tableS4_comparison.md` (Table S4), written by hand from each tool's documentation, with
+a source for every cell; `tables/table1_comparison.md` (Table 1) condenses it to one code per cell,
+at most 130 characters per row as the journal asks.
 
 | Command | What it does | Time |
 |---|---|---|
-| `python tables/table1_render.py` | the same as a Word file on landscape pages, `out/table1_comparison.docx` (needs pandoc) | seconds |
+| `python tables/table1_render.py` | Table 1 as a Word file, `out/table1_comparison.docx` (needs pandoc) | seconds |
 
 ### Figure 2: transit chains and the eclipse phase
 

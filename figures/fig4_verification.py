@@ -78,12 +78,11 @@ def convergence_panel(ax, data):
         y = anchor * (n / n[0]) ** -slope
         ax.loglog(n, y, color="0.55", ls="--", lw=0.7)
         ax.annotate(text, (n[1], y[1]), xytext=(3, 0), textcoords="offset points",
-                    va="center", fontsize=ps.SIZE - 1, color="0.35")
+                    va="center", fontsize=ps.SIZE, color="0.35")
     ax.set_xlim(12, 1500)
     ax.set_xlabel("Number of cells along the axis")
     ax.set_ylabel("Error on the grid (each check's own measure)")
-    ax.figure.legend(*ax.get_legend_handles_labels(), loc="lower center", ncol=2, fontsize=ps.SIZE - 0.5,
-                     bbox_to_anchor=(0.5, 0.005), columnspacing=1.5)
+    ax.legend(loc="center left", bbox_to_anchor=(1.04, 0.5), frameon=False, handlelength=1.6)
 
 
 def bar_panel(ax, data, rows, xlabel, floor):
@@ -102,13 +101,13 @@ def bar_panel(ax, data, rows, xlabel, floor):
     for yy, v, note in zip(y, values, notes, strict=True):
         text = note or f"{v:.0e}"
         ax.annotate(text, (np.nan_to_num(v, nan=floor), yy), xytext=(4, 0),
-                    textcoords="offset points", va="center", fontsize=ps.SIZE - 1, color="0.25")
+                    textcoords="offset points", va="center", fontsize=ps.SIZE, color="0.25")
     ax.axvline(EPS, color="0.55", ls=":", lw=0.7)
-    ax.annotate("machine epsilon", (EPS, y[0] + 0.7), fontsize=ps.SIZE - 1, color="0.35", ha="center")
+    ax.annotate("machine epsilon", (EPS, y[0] + 0.7), fontsize=ps.SIZE, color="0.35", ha="center")
     ax.set_xscale("log")
     ax.set_xlim(floor, 1e-5)
     ax.set_ylim(-0.7, len(rows) - 0.1)
-    ax.set_yticks(y, labels, fontsize=ps.SIZE - 0.5)
+    ax.set_yticks(y, labels, fontsize=ps.SIZE)
     ax.set_xlabel(xlabel)
     ax.tick_params(axis="y", length=0)
 
@@ -117,12 +116,14 @@ def main():
     data = load()
     OUT.mkdir(exist_ok=True)
     ps.setup()
-    fig = plt.figure(figsize=(ps.WIDTH, 4.6))
-    grid = fig.add_gridspec(2, 2, width_ratios=[0.8, 1], height_ratios=[1, 1.3], hspace=0.6, wspace=1.25,
-                            left=0.085, right=0.97, top=0.95, bottom=0.25)
-    a = fig.add_subplot(grid[:, 0])
-    b = fig.add_subplot(grid[0, 1])
-    c = fig.add_subplot(grid[1, 1])
+    # one panel per row at 8 pt: A with its legend to the right, B and C with their row labels
+    fig = plt.figure(figsize=(ps.WIDTH, 8.4))
+    top = fig.add_gridspec(1, 1, left=0.1, right=0.42, top=0.965, bottom=0.68)
+    rest = fig.add_gridspec(2, 1, height_ratios=[len(LEDGERS), len(EQUIVALENCES)], hspace=0.35,
+                            left=0.43, right=0.86, top=0.6, bottom=0.05)
+    a = fig.add_subplot(top[0])
+    b = fig.add_subplot(rest[0])
+    c = fig.add_subplot(rest[1])
     convergence_panel(a, data)
     bar_panel(b, data, LEDGERS, "Largest unexplained part, relative", 1e-17)
     bar_panel(c, data, EQUIVALENCES, "Largest difference, relative", 1e-17)
@@ -131,7 +132,7 @@ def main():
     a.set_title("A  Grid convergence")
     b.set_title("B  Conservation ledgers")
     c.set_title("C  Models that must be identical")
-    ps.check(fig, [a, b, c] + fig.legends)
+    ps.check(fig, [a, b, c])
     for ext in ("png", "pdf"):
         fig.savefig(OUT / f"fig4_verification.{ext}")
     print(f"wrote {OUT / 'fig4_verification.png'}")

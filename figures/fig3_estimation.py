@@ -55,7 +55,7 @@ def main():
     ftyp = pd.read_csv(tr.RESULTS / "friberg_typical.csv")
     studies = fits["study"].nunique()
     ps.setup()
-    fig, ax = plt.subplots(2, 3, figsize=(ps.WIDTH, 4.7))
+    fig, ax = plt.subplots(3, 2, figsize=(ps.WIDTH, 7.8))
     ax = ax.ravel()
 
     # A
@@ -69,9 +69,9 @@ def main():
     for n, c in SHOWN.items():
         ax[0].plot(t, fitted_profile(n, s1.loc[n], t), c=c, label=f"chain of {n}")
     ax[0].axhline(tr.LLOQ, c="0.8", lw=0.8)
-    ax[0].set(xscale="log", yscale="log", xlim=(0.2, 30), ylim=(0.02, 60), xlabel="Time (h)",
+    ax[0].set(xscale="log", yscale="log", xlim=(0.2, 30), ylim=(0.02, 200), xlabel="Time (h)",
               ylabel="Concentration (mg/L)", title="A  One study and its fits")
-    ax[0].legend(loc="upper center", ncol=3, columnspacing=0.6, handlelength=1.2, fontsize=ps.SIZE - 1)
+    ax[0].legend(loc="upper center", ncol=2, columnspacing=0.6, handlelength=1.2)
 
     # B
     ns = np.array(tr.CHAINS)
@@ -102,7 +102,7 @@ def main():
     ax[2].axvline(np.sqrt(2 * tr.DISP), c="k", ls=":", lw=0.8, label="truth, CV 0.20")
     best = d.idxmin(axis=0).value_counts()
     ax[2].text(0.97, 0.05, "best chain (studies):\n" + "\n".join(f"N = {n}: {c}" for n, c in best.sort_index().items()),
-               transform=ax[2].transAxes, ha="right", va="bottom", fontsize=ps.SIZE - 1)
+               transform=ax[2].transAxes, ha="right", va="bottom", fontsize=ps.SIZE)
     ax[2].set_yscale("symlog", linthresh=1)
     ax[2].set_xscale("log")
     ax[2].set_xticks(cv, [f"{c:.2f}" if n in (3, 10, 25, 60) else "" for n, c in zip(ns, cv, strict=True)])
@@ -142,8 +142,8 @@ def main():
         ax[5].plot(o.TIME / 24, o.DV, ".", c=c, ms=2, alpha=0.6)
         ax[5].plot(ftyp.t / 24, ftyp[f"dose_{amt}"], c=c, label=f"{amt} mg")
     ax[5].set(yscale="log", xlabel="Time (days)", ylabel="Neutrophils (10$^9$/L)", title="F  Friberg model, fit")
-    ax[5].set_ylim(top=40)
-    ax[5].legend(loc="upper center", ncol=3, columnspacing=0.6, handlelength=1.2, fontsize=ps.SIZE - 1.5)
+    ax[5].set_ylim(top=20)
+    ax[5].legend(loc="lower right", handlelength=1.2)
 
     fig.tight_layout(w_pad=1.0, h_pad=1.0)
     ps.check(fig, ax)

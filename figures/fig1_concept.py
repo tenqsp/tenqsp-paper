@@ -41,9 +41,9 @@ OUT = ROOT / "out"
 MODEL = ROOT / "models" / "friberg_maturation.tq"
 DOSE = 90.0
 WRT = ["MTT", "gamma", "circ0", "slope"]
-WIDTH = 50  # characters per line in panel C
+WIDTH = 41  # characters per line in panels C and F (8 pt monospace in half the page)
 DPI = 300
-SIZE = 6.5  # points, at print size: the figure is drawn at the journal's full width
+SIZE = 8  # points, at print size: the figure is drawn at the journal's full width
 EXCERPTS = [  # panel C: pieces of m.explain(), verbatim, in its order ("..." marks a cut)
     ("transport along z", "transit compartments"),
     ("Mean transit time", "= 0.577."),
@@ -52,9 +52,27 @@ EXCERPTS = [  # panel C: pieces of m.explain(), verbatim, in its order ("..." ma
 ]
 
 
-def model_text():
-    lines = [ln for ln in MODEL.read_text().splitlines() if not ln.startswith("#")]
-    return "\n".join(lines)
+def model_text(limit=42):
+    """The model file without its comments, lines longer than ``limit`` broken before an operator
+    outside brackets and continued indented (valid .tq: the wrapped text reads as the same model)."""
+    out = []
+    for ln in MODEL.read_text().splitlines():
+        if ln.startswith("#"):
+            continue
+        while len(ln) > limit:
+            depth, cut = 0, None
+            for i, ch in enumerate(ln[:limit]):
+                depth += (ch == "(") - (ch == ")")
+                if depth == 0 and ch in "+-*" and i > 12:
+                    cut = i - 1 if ln[i - 1] == " " else i
+            if cut is None:
+                break
+            out.append(ln[:cut].rstrip())
+            ln = "    " + ln[cut:].lstrip()
+        out.append(ln)
+    text = "\n".join(out)
+    assert tq.Model.from_text(text).to_latex() == tq.Model.from_text(MODEL.read_text()).to_latex()
+    return text
 
 
 def mathtext_lines(latex):
@@ -154,7 +172,7 @@ def text_panel(ax, title, body, size=SIZE, family="monospace"):
     ax.set_title(title, loc="left")
     box(ax)
     return ax.text(0.03, 0.97, body, va="top", ha="left", family=family, fontsize=size, transform=ax.transAxes,
-                   linespacing=1.25)
+                   linespacing=1.1)
 
 
 def box(ax):
@@ -173,16 +191,16 @@ def check_fits(fig, ax, texts):
 
 def main():
     m, sol, days, rel, mode = runs()
-    plt.rcParams.update({"font.size": SIZE, "axes.titlesize": 7.5, "axes.titleweight": "bold",
-                         "axes.labelsize": SIZE + 0.5, "legend.fontsize": SIZE - 0.5, "axes.linewidth": 0.6,
-                         "xtick.major.width": 0.6, "ytick.major.width": 0.6, "lines.linewidth": 1.1})
-    fig = plt.figure(figsize=(7.0, 8.3), dpi=DPI)  # the checks below measure at print resolution
-    gs = fig.add_gridspec(3, 2, height_ratios=[1.3, 1.1, 1], width_ratios=[1, 1], hspace=0.27, wspace=0.22,
-                          left=0.075, right=0.99, top=0.965, bottom=0.05)
+    plt.rcParams.update({"font.size": SIZE, "axes.titlesize": SIZE, "axes.titleweight": "bold",
+                         "axes.labelsize": SIZE, "legend.fontsize": SIZE, "axes.linewidth": 0.6,
+                         "xtick.major.width": 0.6, "ytick.major.width": 0.6, "lines.linewidth": 1.0})
+    fig = plt.figure(figsize=(7.0, 9.5), dpi=DPI)  # the checks below measure at print resolution
+    gs = fig.add_gridspec(3, 2, height_ratios=[1.4, 1.42, 1.12], width_ratios=[1, 1], hspace=0.24, wspace=0.2,
+                          left=0.09, right=0.99, top=0.975, bottom=0.04)
 
     # A
     ax = fig.add_subplot(gs[0, 0])
-    check_fits(fig, ax, [text_panel(ax, "A  The model, as written (.tq file)", model_text(), size=SIZE - 0.3)])
+    check_fits(fig, ax, [text_panel(ax, "A  The model, as written (.tq file)", model_text(), size=SIZE)])
 
     # B
     ax = fig.add_subplot(gs[0, 1])
@@ -197,14 +215,14 @@ def main():
             texts.append(ax.text(0.04, y, s, style="italic", color="0.35", va="top", transform=ax.transAxes))
             y -= 9 * pt
         else:
-            texts.append(ax.text(0.06, y, s, fontsize=SIZE + 0.5, va="top", transform=ax.transAxes))
-            y -= (17 if r"\dfrac" in s else 11) * pt
+            texts.append(ax.text(0.06, y, s, fontsize=SIZE, va="top", transform=ax.transAxes))
+            y -= (21 if r"\dfrac" in s else 12) * pt
     check_fits(fig, ax, texts)
 
     # C
     ax = fig.add_subplot(gs[1, 0])
     check_fits(fig, ax, [text_panel(ax, "C  What TenQSP says of them: m.explain()", explain_excerpt(m.explain()),
-                                    size=SIZE - 0.3)])
+                                    size=SIZE)])
 
     # D
     ax = fig.add_subplot(gs[1, 1])
@@ -214,7 +232,7 @@ def main():
     for i in range(3):
         ax.plot(td, np.asarray(sol["Transit"])[:, i] * width, c="C1", lw=0.8, alpha=0.5 + 0.25 * i,
                 label="Transit (3 cells)" if i == 0 else None)
-    ax.plot(td, sol["Circ"], c="C3", lw=1.6, label="Circ = ANC")
+    ax.plot(td, sol["Circ"], c="C3", lw=1.0, label="Circ = ANC")
     worst = max(sol.ledger.check().values())
     ax.text(0.03, 0.84, f"conservation ledger:\nlargest unexplained part {worst:.0e}", transform=ax.transAxes,
             ha="left", va="top")
@@ -234,7 +252,7 @@ def main():
 
     # F
     ax = fig.add_subplot(gs[2, 1])
-    check_fits(fig, ax, [text_panel(ax, "F  A slip, caught by m.explain()", slip_panel(), size=SIZE - 0.3)])
+    check_fits(fig, ax, [text_panel(ax, "F  A slip, caught by m.explain()", slip_panel(), size=SIZE)])
 
     OUT.mkdir(exist_ok=True)
     for ext in ("png", "pdf"):

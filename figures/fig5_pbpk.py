@@ -28,7 +28,7 @@ from matplotlib.colors import LogNorm
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
 DPI = 300
-SIZE = 6.5  # points, at print size
+SIZE = 8  # points, at print size
 SPACE_COLORS = {"v": "#f4c7c3", "i": "#fde9b8", "c": "#cfe3f5"}
 VEN, ART = "#7aa6d6", "#e07a6f"  # venous and arterial blood
 
@@ -43,7 +43,7 @@ def structure(ax):
     is a vascular strip along its top (where blood enters and leaves) over its interstitial and
     cellular spaces."""
     ax.set_xlim(0, 10)
-    ax.set_ylim(-2.1, 11.0)
+    ax.set_ylim(-2.6, 11.0)
     ax.axis("off")
     x0, x1 = 2.75, 7.25  # organ boxes
     xi, xc = 5.0, 6.125  # left edges of the interstitial and cellular cells
@@ -59,9 +59,9 @@ def structure(ax):
         ax.add_patch(Rectangle((xc, y), x1 - xc, h - hv, fc=SPACE_COLORS["c"], ec="0.3", lw=0.5))
         ax.text((x0 + xi) / 2, y + (h - hv) / 2, organ, ha="center", va="center", fontsize=SIZE)
         if k == 0:  # labels of the spaces, once
-            ax.text(x0 + 0.1, y + h - hv / 2, "v", ha="left", va="center", fontsize=SIZE - 1.5, style="italic")
+            ax.text(x0 + 0.1, y + h - hv / 2, "v", ha="left", va="center", fontsize=SIZE, style="italic")
             for x, lab in (((xi + xc) / 2, "i"), ((xc + x1) / 2, "c")):
-                ax.text(x, y + (h - hv) / 2, lab, ha="center", va="center", fontsize=SIZE - 1, style="italic")
+                ax.text(x, y + (h - hv) / 2, lab, ha="center", va="center", fontsize=SIZE, style="italic")
     yv = {o: rows[o] + h - 0.14 * h for o in pb.ORGANS}  # middle of each vascular strip
     y_low, y_high = rows["liver"] - 0.05, top + 0.05
     for x, c, name in ((0.35, VEN, "venous\nblood"), (8.65, ART, "arterial\nblood")):
@@ -70,9 +70,9 @@ def structure(ax):
         ax.text(x + 0.5, (y_low + y_high) / 2, name, ha="center", va="center", fontsize=SIZE, rotation=90,
                 color="white", weight="bold")
     # lung: venous -> lung -> arterial (the whole cardiac output)
-    arrow(ax, (1.35, yv["lung"]), (x0, yv["lung"]), color=VEN, lw=1.1)
-    arrow(ax, (x1, yv["lung"]), (8.65, yv["lung"]), color=ART, lw=1.1)
-    ax.text((x1 + 8.65) / 2, yv["lung"] + 0.12, "Q$_{CO}$", ha="center", va="bottom", fontsize=SIZE - 1)
+    arrow(ax, (1.35, yv["lung"]), (x0, yv["lung"]), color=VEN, lw=1.0)
+    arrow(ax, (x1, yv["lung"]), (8.65, yv["lung"]), color=ART, lw=1.0)
+    ax.text((x1 + 8.65) / 2, yv["lung"] + 0.12, "Q$_{CO}$", ha="center", va="bottom", fontsize=SIZE)
     for organ in pb.ORGANS[1:]:
         arrow(ax, (8.65, yv[organ]), (x1, yv[organ]), color=ART)
         if organ not in ("gut", "spleen"):
@@ -84,18 +84,19 @@ def structure(ax):
     y_in = rows["liver"] + h + 0.11
     ax.plot([xp, xp, 3.2], [yv["gut"], y_in, y_in], c="0.35", lw=0.7)
     arrow(ax, (3.2, y_in), (3.2, rows["liver"] + h), color="0.35")
-    ax.text(xp - 0.08, (yv["gut"] + yv["spleen"]) / 2, "portal", ha="right", va="center", fontsize=SIZE - 1,
+    ax.text(xp - 0.08, (yv["gut"] + yv["spleen"]) / 2, "portal", ha="right", va="center", fontsize=SIZE,
             rotation=90)
     # metabolism in the liver cells, and the dose
     xm = (xc + x1) / 2
     arrow(ax, (xm, rows["liver"]), (xm, rows["liver"] - 0.55), color="0.25")
-    ax.text(xm + 0.12, rows["liver"] - 0.3, "f$_u$CL$_{int}$", ha="left", va="center", fontsize=SIZE - 1)
+    ax.text(xm + 0.12, rows["liver"] - 0.3, "f$_u$CL$_{int}$", ha="left", va="center", fontsize=SIZE)
     arrow(ax, (0.85, y_high + 0.35), (0.85, y_high), color="0.25")
-    ax.text(0.85, y_high + 0.38, "IV dose", ha="center", va="bottom", fontsize=SIZE - 1)
+    ax.text(0.85, y_high + 0.38, "IV dose", ha="center", va="bottom", fontsize=SIZE)
     # what the field is
-    ax.text(5.0, -1.25, "field C(organ, space): 9 × 3 = 27 states; v↔i at PS$_1$, i↔c at PS$_2$\n"
-            "(cells at K$_p$ × interstitium); blood pools: 2 compartments",
-            ha="center", va="center", fontsize=SIZE - 0.5, linespacing=1.3)
+    ax.text(5.0, -1.5, "field C(organ, space): 9 × 3 = 27 states\n"
+            "v↔i at PS$_1$, i↔c at PS$_2$ (cells at K$_p$ × interstitium)\n"
+            "blood pools: 2 compartments",
+            ha="center", va="center", fontsize=SIZE, linespacing=1.3)
 
 
 def check_inside(fig, ax, texts, where):
@@ -111,14 +112,16 @@ def main():
     iv = np.load(pb.RESULTS / "iv.npz")
     cl = np.load(pb.RESULTS / "clearance.npz")
     checks = json.loads((pb.RESULTS / "checks.json").read_text())
-    plt.rcParams.update({"font.size": SIZE, "axes.titlesize": 7.5, "axes.titleweight": "bold",
-                         "axes.labelsize": SIZE + 0.5, "legend.fontsize": SIZE - 0.5, "axes.linewidth": 0.6,
-                         "xtick.major.width": 0.6, "ytick.major.width": 0.6, "lines.linewidth": 1.1})
-    fig = plt.figure(figsize=(7.0, 6.2), dpi=DPI)
-    top = fig.add_gridspec(1, 2, width_ratios=[1.05, 1], wspace=0.25, left=0.01, right=0.93, top=0.95,
-                           bottom=0.50)
-    low = fig.add_gridspec(1, 3, width_ratios=[1, 1, 0.7], wspace=0.95, left=0.085, right=0.985, top=0.40,
-                           bottom=0.075)
+    plt.rcParams.update({"font.size": SIZE, "axes.titlesize": SIZE, "axes.titleweight": "bold",
+                         "axes.labelsize": SIZE, "legend.fontsize": SIZE, "axes.linewidth": 0.6,
+                         "xtick.major.width": 0.6, "ytick.major.width": 0.6, "lines.linewidth": 1.0})
+    # at 8 pt: A and B on top, C and D below them, E on its own row
+    fig = plt.figure(figsize=(7.0, 8.6), dpi=DPI)
+    top = fig.add_gridspec(1, 2, width_ratios=[1.05, 1], wspace=0.3, left=0.01, right=0.9, top=0.96,
+                           bottom=0.58)
+    mid = fig.add_gridspec(1, 2, wspace=0.3, left=0.1, right=0.985, top=0.5, bottom=0.27)
+    low = fig.add_gridspec(1, 1, left=0.3, right=0.75, top=0.19, bottom=0.055)
+    low = [mid[0], mid[1], low[0]]
 
     # A: structure
     a = fig.add_subplot(top[0])
@@ -147,7 +150,7 @@ def main():
 
     # C: profiles
     a = fig.add_subplot(low[0])
-    a.semilogy(t, iv["Cart"], "k", lw=1.4, label="arterial blood")
+    a.semilogy(t, iv["Cart"], "k", lw=1.0, label="arterial blood")
     for name in ("brain", "muscle", "adipose", "liver"):
         o = pb.ORGANS.index(name)
         (line,) = a.semilogy(t, C[:, o, :] @ pb.FRAC, label=name)
@@ -156,7 +159,7 @@ def main():
                 a.semilogy(t, C[:, o, s], ls=ls, lw=0.8, c=line.get_color(), label=f"liver, {pb.SPACES[s][:5]}.")
     a.set(xlim=(0, 96), ylim=(1e-3, 300), xlabel="Time (h)", ylabel="Concentration (mg/L)")
     a.set_title("C  Profiles", loc="left")
-    a.legend(ncol=2, frameon=False, handlelength=1.5, columnspacing=0.8, loc="upper right", fontsize=SIZE - 1.5)
+    a.legend(ncol=2, frameon=False, handlelength=1.5, columnspacing=0.8, loc="upper right")
 
     # D: clearance against permeability
     a = ax_d = fig.add_subplot(low[1])
@@ -185,8 +188,8 @@ def main():
     a.set_title("E  Exact checks", loc="left")
 
     check_inside(fig, a, [t for ax in fig.axes for t in ax.texts] + a.get_yticklabels(), "figure")
-    d_right = ax_d.get_window_extent().x1  # E's labels must not reach into D
-    if min(t.get_window_extent().x0 for t in a.get_yticklabels()) < d_right:
+    d_box = ax_d.get_tightbbox(fig.canvas.get_renderer())  # E's labels must not reach into D
+    if any(t.get_window_extent().overlaps(d_box) for t in a.get_yticklabels()):
         raise SystemExit("panel E's labels overlap panel D")
     pb.ROOT.joinpath("out").mkdir(exist_ok=True)
     for ext in ("png", "pdf"):
