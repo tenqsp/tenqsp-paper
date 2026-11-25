@@ -156,7 +156,7 @@ def main():
         (line,) = a.semilogy(t, C[:, o, :] @ pb.FRAC, label=name)
         if name == "liver":
             for s, ls in zip(range(3), (":", "-.", "--"), strict=True):
-                a.semilogy(t, C[:, o, s], ls=ls, lw=0.8, c=line.get_color(), label=f"liver, {pb.SPACES[s][:5]}.")
+                a.semilogy(t, C[:, o, s], ls=ls, lw=0.8, c=line.get_color(), label=f"liver, {pb.SPACES[s]}")
     a.set(xlim=(0, 96), ylim=(1e-3, 300), xlabel="Time (h)", ylabel="Concentration (mg/L)")
     a.set_title("C  Profiles", loc="left")
     a.legend(ncol=2, frameon=False, handlelength=1.5, columnspacing=0.8, loc="upper right")

@@ -15,7 +15,7 @@ C  -2LL against the transit-time CV of the chain, 1/sqrt(N), relative to the bes
    each study: the data reject short chains and pick a CV near the truth's (dotted); with its
    longer tail, the truth sits between the chains of 25 and 40
 D  theophylline (12 subjects): -2LL against the chain length, first-order absorption, and
-   transport with an estimated dispersion on 20 and 40 cells (when fitted)
+   transport with an estimated dispersion on 20 and 40 grid cells (when fitted)
 E  Friberg's myelosuppression model fitted to a simulated study: estimates with 95 %
    intervals, relative to the truth
 F  the same study: neutrophil counts and the fitted typical profiles for each dose
@@ -110,8 +110,8 @@ def main():
     ax[2].set_yticks([0, 1, 10, 100], ["0", "1", "10", "100"])
     ax[2].set_ylim(-0.2, 3 * float(d.max().max()))
     ax[2].set(xlabel="Transit-time CV, 1/$\\sqrt{N}$",
-              ylabel="$-$2LL $-$ best of study", title="C  Choosing the chain")
-    ax[2].legend(loc="upper left")
+              ylabel="$-$2LL $-$ best of study", title="C  $-$2LL against chain length")
+    ax[2].legend(loc="upper right", bbox_to_anchor=(1.0, 0.66))  # clear of the study lines and the truth
 
     # D
     th = theoph.set_index("N")
@@ -120,7 +120,7 @@ def main():
     disp = tr.RESULTS / "theoph_dispersion.csv"
     if disp.exists():
         for (_, row), ls in zip(pd.read_csv(disp).iterrows(), ("-", ":"), strict=False):
-            ax[3].axhline(row.m2ll, c="C0", ls=ls, lw=0.9, label=f"dispersion, {int(row.N)} cells")
+            ax[3].axhline(row.m2ll, c="C0", ls=ls, lw=0.9, label=f"dispersion, {int(row.N)} grid cells")
     ax[3].set(xscale="log", xlabel="Chain length N", ylabel="$-$2LL", title="D  Theophylline")
     ax[3].set_xticks(th.index[1:], [str(n) for n in th.index[1:]])
     ax[3].set_xticks([], minor=True)

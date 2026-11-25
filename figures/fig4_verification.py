@@ -6,9 +6,9 @@ results/tableS2/*.json into out/fig4_verification.png and .pdf (seconds).
     python tables/tableS2_runs.py           # the computations, about 5 min
     python figures/fig4_verification.py
 
-(A) error against the number of cells for the tutorials with a grid-convergence study,
-with reference slopes 1 and 2; (B) the largest unexplained part of each conservation ledger
-and mass balance; (C) the differences between models that must be identical (an axis and the
+(A) error against the number of grid cells for the tutorials with a grid-convergence study,
+with reference slopes 1 and 2; (B) the largest mass-balance error of each conservation ledger
+and mass balance; (C) exact equivalences, the differences between models that must be identical (an axis and the
 chain of compartments it replaces, a field and the hand-written ODEs, ...). Drawn at print
 size (printstyle.py).
 """
@@ -49,13 +49,13 @@ LEDGERS = [
     ("12", "ledger", "12 tolerance: ledger (2 runs)"),
 ]
 EQUIVALENCES = [
-    ("01", "chain_vs_axis_rel", "01 transit chain = axis, 4 cells"),
+    ("01", "chain_vs_axis_rel", "01 transit chain = axis, 4 grid cells"),
     ("02", "notation_vs_api_rel", "02 gut: notation = Python API"),
-    ("02", "cat_closed_form", "02 gut: 7 erlang cells = CAT model"),
+    ("02", "cat_closed_form", "02 gut: 7 erlang grid cells = CAT model"),
     ("02", "regimen_vs_sum_rel", "02 gut: regimen = sum of single doses"),
-    ("03", "chain_vs_axis_rel", "03 Friberg ODEs = axis, 3 cells"),
-    ("04", "erlang_gamma_closed_form_rel", "04 erlang cells = gamma lifespans"),
-    ("05", "tanks_in_series_rel", "05 erlang cells = tanks in series"),
+    ("03", "chain_vs_axis_rel", "03 Friberg ODEs = axis, 3 grid cells"),
+    ("04", "erlang_gamma_closed_form_rel", "04 erlang grid cells = gamma lifespans"),
+    ("05", "tanks_in_series_rel", "05 erlang grid cells = tanks in series"),
     ("06", "field_vs_odes", "06 PBPK field = 29 hand-written ODEs"),
     ("07", "standard_model", "07 HIV, constant rates = 3 ODEs"),
     ("09", "matrix_exponential", "09 two-state switch = matrix exponential"),
@@ -80,7 +80,7 @@ def convergence_panel(ax, data):
         ax.annotate(text, (n[1], y[1]), xytext=(3, 0), textcoords="offset points",
                     va="center", fontsize=ps.SIZE, color="0.35")
     ax.set_xlim(12, 1500)
-    ax.set_xlabel("Number of cells along the axis")
+    ax.set_xlabel("Number of grid cells along the axis")
     ax.set_ylabel("Error on the grid (each check's own measure)")
     ax.legend(loc="center left", bbox_to_anchor=(1.04, 0.5), frameon=False, handlelength=1.6)
 
@@ -125,13 +125,13 @@ def main():
     b = fig.add_subplot(rest[0])
     c = fig.add_subplot(rest[1])
     convergence_panel(a, data)
-    bar_panel(b, data, LEDGERS, "Largest unexplained part, relative", 1e-17)
+    bar_panel(b, data, LEDGERS, "Largest mass-balance error, relative", 1e-17)
     bar_panel(c, data, EQUIVALENCES, "Largest difference, relative", 1e-17)
     for ax in (a, b, c):
         ax.spines[["top", "right"]].set_visible(False)
     a.set_title("A  Grid convergence")
-    b.set_title("B  Conservation ledgers")
-    c.set_title("C  Models that must be identical")
+    b.set_title("B  Mass balance")
+    c.set_title("C  Exact equivalences")
     ps.check(fig, [a, b, c])
     for ext in ("png", "pdf"):
         fig.savefig(OUT / f"fig4_verification.{ext}")

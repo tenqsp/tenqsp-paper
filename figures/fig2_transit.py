@@ -45,12 +45,12 @@ def main():
     diffs = []
     for n, c in ((4, "C0"), (10, "C2")):
         ax[0].plot(t, tr[f"chain_{n}"], c=c, label=f"chain of {n}")
-        ax[0].plot(t[::8], tr[f"axis_{n}"][::8], "o", c=c, ms=3, mfc="none", label=f"axis, {n} cells")
+        ax[0].plot(t[::8], tr[f"axis_{n}"][::8], "o", c=c, ms=3, mfc="none", label=f"axis, {n} grid cells")
         diffs.append(np.max(np.abs(tr[f"axis_{n}"] - tr[f"chain_{n}"])))
     ax[0].set(xlabel="Time (h)", ylabel="Concentration (mg/L)", title="A  Transit absorption")
     ax[0].set_ylim(-0.3, 11)
     ax[0].legend(loc="upper right", handlelength=1.4)
-    ax[0].text(0.95, 0.47, f"largest difference\n{max(diffs):.0e} mg/L", transform=ax[0].transAxes,
+    ax[0].text(0.97, 0.40, f"largest\ndifference\n{max(diffs):.1e} mg/L", transform=ax[0].transAxes,
                ha="right")
 
     # B
@@ -89,7 +89,7 @@ def main():
     ax[3].axvline(1, c="grey", lw=0.8, ls=":")
     ax[3].set_xscale("log")
     ax[3].set(xlabel="T$_0$/T* (= R$_0$)", ylabel="Early growth rate (1/day)",
-              title="D  Same threshold, R$_0$ = 1")
+              title="D  Growth rate against R$_0$")
     ax[3].legend()
 
     # E

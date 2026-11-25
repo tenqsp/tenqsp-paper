@@ -7,12 +7,12 @@ Run fig6_runs.py and fig6_gradients.py first (or use the results in the reposito
     python figures/fig6_spheroid.py [--quick]     # writes out/fig6_spheroid.png and .pdf
 
 A  tumor burden under three schedules with the same average plasma level (solid: EC50 = 4;
-   dotted: linear kill)
+   dotted: linear kill; dashed: one cell in spheroids of 10^5 and 10^6 cells)
 B  mean resistance level
 C  mean density against resistance at the end, for each kill and schedule; open symbols: the
    same model without the depth axis (with depth, the burden is divided by the volume 4*pi/3)
 D  the cells over depth and resistance at the end (a bolus every 21, EC50 = 4)
-E  resistance by depth at the end: fast (epsd = 0.1) and slow (epsd = 5) penetration
+E  resistance by depth at the end: fast (epsd = 0.1) and slow (epsd = 5) penetration (EC50 4)
 F  which doses matter: change of the mean burden over the course for a dose given 1 time
    unit later, or 1% larger (reverse-mode derivatives, one run); inset: the burden at the end
    for a dose 1 time unit later (only the last few doses count)
@@ -56,8 +56,15 @@ def main(mode):
         ax[1].plot(z["t"], z["mean_x"], c=c, ls=":", lw=0.8)
     ax[0].set(xlabel="Time (dimensionless)", ylabel="Tumor burden", title="A  Burden")
     ax[1].set(xlabel="Time (dimensionless)", ylabel="Mean resistance level", title="B  Resistance")
-    ax[0].plot([], [], c="0.4", ls=":", lw=0.8, label="linear kill")
-    ax[0].legend(loc="center right", bbox_to_anchor=(1.0, 0.45), handlelength=1.6)
+    # one cell in spheroids of 10^5 and 10^6 cells (the starting amount / cells)
+    total0 = load("spheroid_pk_0.25_inf_1")["total"][0]
+    for cells, exp, at in ((1e5, "5", 0.985), (1e6, "6", 0.80)):  # 10^6 label clear of the dotted curves
+        ax[0].axhline(total0 / cells, c="0.45", ls="--", lw=0.7, zorder=0)
+        ax[0].text(at, total0 / cells * 0.78, f"one cell (10$^{exp}$-cell tumor)", transform=ax[0].get_yaxis_transform(),
+                   ha="right", va="top", fontsize=ps.SIZE, color="0.3")
+    # the schedule legend serves A and B; B has room for it (lower right)
+    ax[1].plot([], [], c="0.4", ls=":", lw=0.8, label="linear kill")
+    ax[1].legend(loc="lower right", handlelength=1.6)
 
     for isat, label, c in (("0", "linear kill", "k"), ("0.25", "EC50 4", "C2"), ("1", "EC50 1", "C4")):
         for s in sp.SCHEDULES:
@@ -70,12 +77,13 @@ def main(mode):
                       edgecolors="C2", label="EC50 4, no depth" if s == "inf" else None)
     ax[2].set(yscale="log", xlabel="Resistance at the end", ylabel="Mean density at the end",
               title="C  At the end")
-    ax[2].text(0.03, 0.03, "o infusion, □ every 7, △ every 21", transform=ax[2].transAxes, va="bottom",
+    ax[2].text(0.03, 0.03, "○ infusion, □ every 7, △ every 21", transform=ax[2].transAxes, va="bottom",
                fontsize=ps.SIZE)
     ax[2].legend(loc="center left")
 
     n = load("spheroid_pk_0.25_21_1")["n"][-1]
-    im = ax[3].pcolormesh(r, x, np.log10(np.maximum(n, 1e-12)).T, vmin=-8, shading="auto")
+    im = ax[3].pcolormesh(r, x, np.log10(np.maximum(n, 1e-12)).T, vmin=-8, shading="auto",
+                         rasterized=True)  # drawn as one image: no seams between grid cells in the PDF
     fig.colorbar(im, ax=ax[3], label="log$_{10}$ cell density", fraction=0.07, pad=0.03)
     ax[3].set(xlabel="Distance from the center r", ylabel="Resistance level x",
               title="D  Cells at the end")
@@ -87,7 +95,7 @@ def main(mode):
     ax[4].set(xlabel="Distance from the center r", ylabel="Mean resistance level",
               title="E  Resistance by depth")
     ax[4].set_ylim(top=0.9)
-    ax[4].legend(ncol=2, loc="upper center", columnspacing=0.8, handlelength=1.6, title="schedule, penetration",
+    ax[4].legend(ncol=2, loc="upper center", columnspacing=0.8, handlelength=1.6, title="schedule, penetration (EC50 4)",
                  title_fontsize=ps.SIZE, fontsize=ps.SIZE)
 
     g = d / "gradients.npz"
@@ -102,7 +110,7 @@ def main(mode):
         ax[5].bar(number + 0.2, later, width=0.4, color="C3", label="each dose 1 time unit later")
         ax[5].axhline(0, c="k", lw=0.5)
         ax[5].set(xlabel="Dose number (every 21)", ylabel="% change of the mean burden",
-                  title="F  Which doses matter")
+                  title="F  Sensitivity to dose amount and timing")
         ax[5].legend(loc="upper left", fontsize=ps.SIZE)
         # inset: the burden at the end forgets all but the last few dose times
         ins = ax[5].inset_axes([0.2, 0.36, 0.5, 0.28])

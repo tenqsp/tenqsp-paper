@@ -12,13 +12,13 @@ A  the model as written (.tq; comments left out)
 B  the equations TenQSP reads from it (m.to_latex(), shown here with matplotlib's mathtext)
 C  what TenQSP makes of them (m.explain(), excerpts)
 D  a run after a 90 mg dose: proliferating cells, the 3 maturation cells, circulating
-   neutrophils; and the conservation ledger's largest unexplained part
+   neutrophils; and the largest mass-balance error (relative)
 E  derivatives of the neutrophil count with respect to the parameters (JAX, forward
    mode), as relative sensitivities d log ANC / d log theta
 F  a slip caught: the file with one symbol changed (Circ's inflow divided by MTT instead of
    T_mat), and the transfer explain() pairs, as written and with the slip: the amount entering
-   Circ no longer matches the amount leaving the axis. The ledger still closes, since it books
-   what the equations say (the fit of Figure 3E-F is not repeated here)
+   Circ no longer matches the amount leaving the axis. Mass balance still holds, because the
+   ledger tracks the equations as written (the fit of Figure 3E-F is not repeated here)
 """
 
 import re
@@ -163,7 +163,7 @@ def slip_panel():
     lines = ["As written:", *wrap(SLIP[0] + " - ktr*Circ"), "With a slip:", *wrap(SLIP[1] + " - ktr*Circ"), "",
              "m.explain(), the transfer into Circ:", "as written", *wrap(ok), "with the slip", *wrap(wrong), "",
              *textwrap.wrap("Entering Circ no longer equals leaving the axis. "
-                            f"The ledger still closes ({ledger:.0e}): it books what the equations say.", WIDTH)]
+                            f"Mass balance still holds ({ledger:.0e}), because the ledger tracks the equations as written.", WIDTH)]
     return "\n".join(lines)
 
 
@@ -195,7 +195,7 @@ def main():
                          "axes.labelsize": SIZE, "legend.fontsize": SIZE, "axes.linewidth": 0.6,
                          "xtick.major.width": 0.6, "ytick.major.width": 0.6, "lines.linewidth": 1.0})
     fig = plt.figure(figsize=(7.0, 9.5), dpi=DPI)  # the checks below measure at print resolution
-    gs = fig.add_gridspec(3, 2, height_ratios=[1.4, 1.42, 1.12], width_ratios=[1, 1], hspace=0.24, wspace=0.2,
+    gs = fig.add_gridspec(3, 2, height_ratios=[1.4, 1.42, 1.17], width_ratios=[1, 1], hspace=0.22, wspace=0.2,
                           left=0.09, right=0.99, top=0.975, bottom=0.04)
 
     # A
@@ -205,7 +205,7 @@ def main():
     # B
     ax = fig.add_subplot(gs[0, 1])
     ax.axis("off")
-    ax.set_title("B  The equations read: m.to_latex()", loc="left")
+    ax.set_title("B  Equations as parsed: m.to_latex()", loc="left")
     box(ax)
     pt = fig.dpi / 72 / ax.get_window_extent().height  # one point, in axes units
     y, texts = 0.97, []
@@ -221,7 +221,7 @@ def main():
 
     # C
     ax = fig.add_subplot(gs[1, 0])
-    check_fits(fig, ax, [text_panel(ax, "C  What TenQSP says of them: m.explain()", explain_excerpt(m.explain()),
+    check_fits(fig, ax, [text_panel(ax, "C  Discretization report: m.explain()", explain_excerpt(m.explain()),
                                     size=SIZE)])
 
     # D
@@ -231,15 +231,16 @@ def main():
     width = 1 / 3
     for i in range(3):
         ax.plot(td, np.asarray(sol["Transit"])[:, i] * width, c="C1", lw=0.8, alpha=0.5 + 0.25 * i,
-                label="Transit (3 cells)" if i == 0 else None)
+                label="Transit (3 grid cells)" if i == 0 else None)
     ax.plot(td, sol["Circ"], c="C3", lw=1.0, label="Circ = ANC")
     worst = max(sol.ledger.check().values())
-    ax.text(0.03, 0.84, f"conservation ledger:\nlargest unexplained part {worst:.0e}", transform=ax.transAxes,
+    ax.text(0.03, 0.84, f"mass-balance error\n(relative): {worst:.0e}", transform=ax.transAxes,
             ha="left", va="top")
     ax.set_ylim(0, 9.5)
-    ax.set(xlabel="Time (days)", ylabel="Cells (10$^9$/L)")
-    ax.set_title(f"D  A run: m.solve(), {DOSE:.0f} mg at day 0", loc="left")
-    ax.legend(loc="upper right", ncol=3, frameon=False, handlelength=1.5, columnspacing=1)
+    ax.set_xlabel("Time (days)", labelpad=1)
+    ax.set_ylabel("Cells (10$^9$/L)")
+    ax.set_title(f"D  Simulation after {DOSE:.0f} mg on day 0", loc="left")
+    ax.legend(loc="upper right", ncol=3, frameon=False, handlelength=1.2, columnspacing=0.7, handletextpad=0.4)
 
     # E
     ax = fig.add_subplot(gs[2, 0])
@@ -252,7 +253,7 @@ def main():
 
     # F
     ax = fig.add_subplot(gs[2, 1])
-    check_fits(fig, ax, [text_panel(ax, "F  A slip, caught by m.explain()", slip_panel(), size=SIZE)])
+    check_fits(fig, ax, [text_panel(ax, "F  A coding error detected by m.explain()", slip_panel(), size=SIZE)])
 
     OUT.mkdir(exist_ok=True)
     for ext in ("png", "pdf"):
