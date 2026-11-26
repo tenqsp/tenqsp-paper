@@ -29,23 +29,23 @@ cell geometries by finite volumes; its parameter estimation (COPASI) is for non-
 models [40]. PhysiCell (with BioFVM) and Chaste: open-source agent-based and continuum tissue
 simulators; no pharmacometric data or population estimation documented [41, 42].
 
-## Points to word carefully in the text
+## Notes on the entries
 
 1. NONMEM's derivatives: the eta-sensitivities are integrated with the amounts; the THETA
    gradient uses forward finite differences by default, and `FAST` makes it analytic only
-   when every THETA is MU-referenced [2, 5, 6]. Write it this way, not "finite differences".
+   when every THETA is MU-referenced [2, 5, 6]. So the table does not say "finite differences".
 2. nlmixr2est `fast=TRUE` (analytic outer gradient, Almquist et al. 2015) is in version 7.2.1
-   (October 2026); cite the version.
+   (October 2026) [14].
 3. Monolix does not say how the derivatives behind its linearized Fisher information are
-   computed: "not documented", not "finite differences".
-4. Stan: "no DDE solver" rests on the Stan forum, not the manual.
+   computed, so the entry is "not documented", not "finite differences" [9].
+4. Stan: "no DDE solver" rests on the Stan forum [16], not the manual.
 5. "Not documented" for the ledger: FiPy's finite volumes conserve by construction, but we
    found no ledger (an account of what entered, left and was made) in any of these tools.
 6. NONMEM's PDE templates: the guide lists them under 7.5 and tags the utility NM74; Cheng
-   and Li write "since NONMEM 7.4". Say "7.4/7.5".
+   and Li write "since NONMEM 7.4" [1, 2]. The table gives "7.4/7.5".
 7. Julia: dosing works through callbacks; no reader for NONMEM-style data outside Pumas.
 
-## PDE models run in NONMEM or Monolix (for the introduction)
+## PDE models run in NONMEM or Monolix
 
 - Cheng Y, Li Y. Partial differential equation (PDE)-based spatial pharmacometrics in
   NONMEM: method of lines (MOL) implementation with AI-assisted model development. J Clin
